@@ -4,12 +4,15 @@ import Product from "../models/productModel.js";
 const addProduct = asyncHandler(async (req, res) => {
   try {
     const { name, price, description, category, quantity, brand } = req.fields;
-    // console.log(req.fields);
-    if (!name || !price || !description || !category || !quantity || !brand) {
+    console.log(req.fields);
+   
+    if (!name || !price || !description || !category || !quantity || !brand )  {
       return res.status(400).send("Please fill all fields");
     }
 
-    const product = new Product({ ...req.fields });
+    const product = new Product({ ...req.fields })
+    product.populate("category")
+    console.log("Product: ", product);
     await product.save();
     res.status(201).send(product);
   } catch (error) {
@@ -30,6 +33,8 @@ const updateProduct = asyncHandler(async (req, res) => {
       { ...req.fields },
       { new: true } // return the updated product
     );
+    product.populate("category")
+    console.log("Propduct: ", product);
 
     if (!product) {
       return res.status(404).send("Product not found");
@@ -48,7 +53,7 @@ const deleteProduct = asyncHandler(async (req, res) => {
     if (!product) {
       return res.status(404).send("Product not found");
     }
-    res.status(200).send("Product deleted");
+    res.status(200).send(product);
   } catch (error) {
     console.log(error);
     res.status(500).send("Internal server error");
@@ -81,6 +86,8 @@ const fetchProductById = asyncHandler(async (req, res) => {
   try {
     const { id } = req.params;
     const product = await Product.findById(id);
+    product.populate("category")
+    console.log("Product aapdu: ", product);
     if (!product) {
       return res.status(404).send("Product not found");
     }

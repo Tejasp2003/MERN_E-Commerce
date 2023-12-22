@@ -4,9 +4,9 @@ import {
   useCreateProductMutation,
   useUploadProductImageMutation,
 } from "../../redux/api/productApiSlice.js";
-import {  useGetCategoriesQuery } from "../../redux/api/categoryApiSlice.js";
+import { useGetCategoriesQuery } from "../../redux/api/categoryApiSlice.js";
 import { toast } from "react-hot-toast";
-// import AdminMenu from "./AdminMenu";
+import AdminMenu from "./AdminMenu";
 
 const ProductList = () => {
   const [image, setImage] = useState("");
@@ -22,8 +22,8 @@ const ProductList = () => {
 
   const [uploadProductImage] = useUploadProductImageMutation();
   const [createProduct] = useCreateProductMutation();
-  const { data: categories } =  useGetCategoriesQuery();
-  console.log(categories);
+  const { data: categories } = useGetCategoriesQuery();
+  console.log(category);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -39,7 +39,10 @@ const ProductList = () => {
       productData.append("brand", brand);
       productData.append("countInStock", stock);
 
-      const { data } = await createProduct(productData);
+      console.log("Product Data", productData);
+      console.log("name", name);
+      const data = await createProduct(productData).unwrap();
+      console.log("Data", data);
 
       if (data.error) {
         toast.error("Product create failed. Try Again.");
@@ -59,7 +62,6 @@ const ProductList = () => {
 
     try {
       const res = await uploadProductImage(formData).unwrap();
-      console.log("Helo:", res);
       toast.success(res.message);
       setImage(res.image);
       setImageUrl(res.image);
@@ -68,14 +70,11 @@ const ProductList = () => {
     }
   };
 
-  console.log(imageUrl);
-
   return (
     <div className="container xl:mx-[9rem] sm:mx-[0]">
       <div className="flex flex-col md:flex-row">
-        {/* <AdminMenu /> */}
+        <AdminMenu />
         <div className="md:w-3/4 p-3">
-            {imageUrl && imageUrl}
           <div className="h-12">Create Product</div>
 
           {imageUrl && (
@@ -95,7 +94,7 @@ const ProductList = () => {
               <input
                 type="file"
                 name="image"
-                accept="image/*" 
+                accept="image/*"
                 onChange={uploadFileHandler}
                 className={!image ? "hidden" : "text-white"}
               />
