@@ -15,6 +15,7 @@ import {logout} from "../../redux/features/auth/authSlice.js"
 
 
 import "./Navigation.css";
+import FavoritesCount from "../Products/FavoritesCount.jsx";
 
 const Navigation = () => {
 
@@ -90,7 +91,7 @@ const Navigation = () => {
             <span className="hidden nav-item-name mt-[3rem]">
               Favorites
             </span>{" "}
-            {/* <FavoritesCount /> */}
+            <FavoritesCount />
           </div>
         </Link>
       </div>
