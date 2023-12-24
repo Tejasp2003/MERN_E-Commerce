@@ -23,7 +23,7 @@ const ProductList = () => {
   const [uploadProductImage] = useUploadProductImageMutation();
   const [createProduct] = useCreateProductMutation();
   const { data: categories } = useGetCategoriesQuery();
-  console.log(category);
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -170,10 +170,14 @@ const ProductList = () => {
                   placeholder="Choose Category"
                   className="p-4 mb-3 w-[30rem] border rounded-lg bg-[#101011] text-white"
                   onChange={(e) => setCategory(e.target.value)}
+                  // initital value is empty string
+                  value={category}
+                  
                 >
-                  {categories?.map((c) => (
-                    <option key={c._id} value={c._id}>
-                      {c.name}
+                  <option value="">Choose Category</option>
+                  {categories?.map((category) => (
+                    <option key={category._id} value={category._id}>
+                      {category.name}
                     </option>
                   ))}
                 </select>

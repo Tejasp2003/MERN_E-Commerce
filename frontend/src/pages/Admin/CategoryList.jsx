@@ -73,6 +73,7 @@ const CategoryList = () => {
         e.preventDefault();
         try {
             const result = await deleteCategory(selectedCategory._id).unwrap();
+            console.log(result);
             if (result.error) {
                 toast.error(result.error);
             } else {
