@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useGetFilteredProductsQuery } from "../redux/api/productApiSlice.js";
-import { useFetchCategoriesQuery } from "../redux/api/categoryApiSlice.js";
+import {useGetCategoriesQuery} from "../redux/api/categoryApiSlice.js";
 
 import {
   setCategories,
   setProducts,
   setChecked,
-} from "../redux/features/shop/shopSlice";
+} from "../redux/features/shop/shopSlice.js";
 import Loader from "../components/Loader";
 import ProductCard from "./Products/ProductCard";
 
@@ -17,7 +17,7 @@ const Shop = () => {
     (state) => state.shop
   );
 
-  const categoriesQuery = useFetchCategoriesQuery();
+  const categoriesQuery = useGetCategoriesQuery();
   const [priceFilter, setPriceFilter] = useState("");
 
   const filteredProductsQuery = useGetFilteredProductsQuery({
@@ -82,7 +82,7 @@ const Shop = () => {
 
   return (
     <>
-      <div className="container mx-auto">
+      <div className="container mx-auto ml-[40px]">
         <div className="flex md:flex-row">
           <div className="bg-[#151515] p-3 mt-2 mb-2">
             <h2 className="h4 text-center py-2 bg-black rounded-full mb-2">
