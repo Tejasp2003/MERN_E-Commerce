@@ -8,7 +8,12 @@ import {
   logoutCurrentUser,
   updateCurrentUser,
     getUserById,
-    updateUserById
+    updateUserById,
+    getUserFavorites,
+    addProductToFavorites,
+    removeProductFromFavorites
+
+
 } from "../controllers/userController.js";
 import {
   authenticate,
@@ -16,7 +21,12 @@ import {
 } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
-1;
+
+
+
+router.route("/favorites").get(authenticate, getUserFavorites);
+router.route("/favorites").post(authenticate, addProductToFavorites );
+router.route("/favorites").delete(authenticate, removeProductFromFavorites);
 
 router
   .route("/")

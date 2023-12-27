@@ -2,6 +2,7 @@ import asyncHandler from "../middlewares/asyncHandler.js";
 import User from "../models/userModel.js";
 import bcrypt from "bcryptjs";
 import generateToken from "../utils/createToken.js";
+import Product from "../models/productModel.js";
 
 const createUser = asyncHandler(async (req, res) => {
   const { username, email, password } = req.body;
@@ -123,29 +124,112 @@ const deleteUserById = asyncHandler(async (req, res) => {
 
 const getUserById = asyncHandler(async (req, res) => {
   const user = await User.findById(req.params.id).select("-password");
-  if(!user){
-    res.status(404)
-    throw new Error("User not found")
+  if (!user) {
+    res.status(404);
+    throw new Error("User not found");
   }
-  res.status(200).json(user)
-}
-);
-
+  res.status(200).json(user);
+});
 
 const updateUserById = asyncHandler(async (req, res) => {
   const user = await User.findById(req.params.id);
-  if(!user){
-    res.status(404)
-    throw new Error("User not found")
+  if (!user) {
+    res.status(404);
+    throw new Error("User not found");
   }
-  console.log(req.body.username)
+  console.log(req.body.username);
   user.username = req.body.username ? req.body.username : user.username;
   user.email = req.body.email ? req.body.email : user.email;
   user.isAdmin = req.body.isAdmin ? req.body.isAdmin : user.isAdmin;
   const updatedUser = await user.save();
-  res.status(200).json(updatedUser)
-}
-);
+  res.status(200).json(updatedUser);
+});
+
+const addProductToFavorites = asyncHandler(async (req, res) => {
+  try {
+    const { productId } = req.body;
+    const user = await User.findById(req.user._id);
+
+    console.log(user);
+    console.log(productId);
+
+    if (!user) {
+      res.status(404);
+      throw new Error("User not found");
+    }
+
+    const product = await Product.findById(productId);
+    if (!product) {
+      res.status(404);
+      throw new Error("Product not found");
+    }
+
+    const isProductInFavorites = await user.favorites.find(
+      (favorite) => favorite.toString() === productId.toString()
+    );
+
+    if (isProductInFavorites) {
+      res.status(400);
+      throw new Error("Product already in favorites");
+    }
+    user.favorites.push(productId);
+    await user.save();
+    res.status(200).json({ message: "Product added to favorites" });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+const removeProductFromFavorites = asyncHandler(async (req, res) => {
+  try {
+    const { productId } = req.body;
+    const user = await User.findById(req.user._id);
+
+    if (!user) {
+      res.status(404);
+      throw new Error("User not found");
+    }
+
+    const product = await Product.findById(productId);
+    if (!product) {
+      res.status(404);
+      throw new Error("Product not found");
+    }
+
+    const isProductInFavorites = await user.favorites.find(
+      (favorite) => favorite.toString() === productId.toString()
+    );
+
+    if (!isProductInFavorites) {
+      res.status(400);
+      throw new Error("Product not in favorites");
+    }
+
+    user.favorites = user.favorites.filter(
+      (favorite) => favorite.toString() != productId.toString()
+    );
+
+    await user.save();
+    res.status(200).json({ message: "Product removed from favorites" });
+  } catch (error) {
+    console.log(error.message);
+    res.status(400).json({ message: error.message });
+  }
+});
+
+const getUserFavorites = asyncHandler(async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id).populate("favorites").exec();
+    if (!user) {
+      res.status(404);
+      throw new Error("User not found");
+    }
+    res.status(200).json(user.favorites);
+  } catch (error) {
+    console.log(error.message);
+    res.status(400).json({ message: error.message });
+  }
+});
 
 export {
   createUser,
@@ -156,5 +240,8 @@ export {
   updateCurrentUser,
   deleteUserById,
   getUserById,
-  updateUserById
+  updateUserById,
+  addProductToFavorites,
+  removeProductFromFavorites,
+  getUserFavorites,
 };

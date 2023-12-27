@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   useCreateProductMutation,
@@ -23,7 +23,6 @@ const ProductList = () => {
   const [uploadProductImage] = useUploadProductImageMutation();
   const [createProduct] = useCreateProductMutation();
   const { data: categories } = useGetCategoriesQuery();
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -62,13 +61,45 @@ const ProductList = () => {
 
     try {
       const res = await uploadProductImage(formData).unwrap();
+      console.log(res);
       toast.success(res.message);
-      setImage(res.image);
-      setImageUrl(res.image);
+      setImage(res.imageUrl);
+      setImageUrl(res.imageUrl);
     } catch (error) {
       toast.error(error?.data?.message || error.error);
     }
   };
+
+  const openCloudinaryWidget = () => {
+    window.cloudinary.openUploadWidget(
+      {
+        cloudName:"dh8gfmbp2",
+        uploadPreset: "embmj1ia",
+        sources: ["local", "url", "camera"],
+        cropping: true,
+        multiple: false,
+        folder: "your_folder",
+        tags: ["product"],
+      },
+      (error, result) => {
+        if (!error && result && result.event === "success") {
+          console.log("Upload Success:", result.info);
+          setImageUrl(result.info.secure_url);
+          setImage(result.info.secure_url);
+          toast.success("Image uploaded successfully");
+        }
+      }
+    );
+  };
+
+  useEffect(() => {
+    if (!window.cloudinary) {
+      const script = document.createElement("script");
+      script.src = "https://upload-widget.cloudinary.com/global/all.js";
+      script.async = true;
+      document.body.appendChild(script);
+    }
+  }, []);
 
   return (
     <div className="container xl:mx-[9rem] sm:mx-[0]">
@@ -87,7 +118,7 @@ const ProductList = () => {
             </div>
           )}
 
-          <div className="mb-3">
+          {/* <div className="mb-3">
             <label className="border text-white px-4 block w-full text-center rounded-lg cursor-pointer font-bold py-11">
               {image ? image.name : "Upload Image"}
 
@@ -99,8 +130,16 @@ const ProductList = () => {
                 className={!image ? "hidden" : "text-white"}
               />
             </label>
-          </div>
+          </div> */}
 
+          <div className="mb-3">
+            <button
+              className="border text-white px-4 block w-full text-center rounded-lg cursor-pointer font-bold py-11"
+              onClick={openCloudinaryWidget}
+            >
+              Upload Image
+            </button>
+          </div>
           <div className="p-3">
             <div className="flex flex-wrap">
               <div className="one">
@@ -172,7 +211,6 @@ const ProductList = () => {
                   onChange={(e) => setCategory(e.target.value)}
                   // initital value is empty string
                   value={category}
-                  
                 >
                   <option value="">Choose Category</option>
                   {categories?.map((category) => (

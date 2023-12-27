@@ -1,33 +1,50 @@
-import { useEffect } from "react";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
-import { useSelector, useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import {
-  addToFavorites, removeFromFavorites, setFavorites
-} from "../../redux/features/favorites/favoriteSlice.js";
-
-import {
-  addFavoriteToLoacalStorage, getFavoritesFromLocalStorage, removeFavoriteFromLocalStorage
-} from "../../Utils/localStorage.js";
+  useAddFavoriteProductMutation,
+  useGetUserFavoriteProductsQuery,
+  useRemoveFavoriteProductMutation,
+} from "../../redux/api/usersApiSlice";
+import toast from "react-hot-toast";
 
 const HeartIcon = ({ product }) => {
-  const dispatch = useDispatch();
-  const favorites = useSelector((state) => state.favorites) || [];
-  const isFavorite = favorites.some((p) => p._id === product._id);
+  const [isFavorite, setIsFavorite] = useState(false);
+  const { userInfo } = useSelector((state) => state.auth);
+  const [addProductToFavorites] = useAddFavoriteProductMutation();
+  const [removeProductFromFavorites] = useRemoveFavoriteProductMutation();
+
+  const { data: favProducts, refetch } = useGetUserFavoriteProductsQuery();
 
   useEffect(() => {
-    const favoritesFromLocalStorage = getFavoritesFromLocalStorage();
-    dispatch(setFavorites(favoritesFromLocalStorage));
-  }, [ ]);
+    const isProductInFavorites = favProducts?.find(
+      (favProduct) => favProduct._id === product._id
+    );
+    setIsFavorite(isProductInFavorites);
+  }, [favProducts, product._id]);
 
-  const toggleFavorites = () => {
+  const toggleFavorites = async () => {
+    if (!userInfo) {
+      toast.error("Please login to add product to favorites");
+      return;
+    }
+
     if (isFavorite) {
-      dispatch(removeFromFavorites(product));
-      // remove the product from the localStorage as well
-      removeFavoriteFromLocalStorage(product._id);
+      await removeProductFromFavorites({
+        userId: userInfo._id,
+        productId: product._id,
+      });
+      refetch();
+      setIsFavorite(false);
+      toast.success("Product removed from favorites");
     } else {
-      dispatch(addToFavorites(product));
-      // add the product to localStorage as well
-      addFavoriteToLoacalStorage(product);
+      await addProductToFavorites({
+        userId: userInfo._id,
+        productId: product._id,
+      });
+      refetch();
+      setIsFavorite(true);
+      toast.success("Product added to favorites");
     }
   };
 

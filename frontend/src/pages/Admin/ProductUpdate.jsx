@@ -67,7 +67,7 @@ const AdminProductUpdate = () => {
     try {
       const res = await uploadProductImage(formData).unwrap();
       toast.success("Item added successfully");
-      setImage(res.image);
+      setImage(res.imageUrl);
     } catch (err) {
       toast.success("Item added successfully");
     }
