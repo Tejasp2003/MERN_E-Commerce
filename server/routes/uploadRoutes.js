@@ -9,10 +9,7 @@ dotenv.config();
 
 // Configure Cloudinary
 
-console.log(process.env.CLOUDINARY_CLOUD_NAME)
-console.log(process.env.CLOUDINARY_API_KEY)
-console.log(process.env.CLOUDINARY_API_SECRET) 
-console.log(process.env.PORT)
+
 cloudinary.v2.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
@@ -23,8 +20,8 @@ cloudinary.v2.config({
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary.v2,
   params: {
-    folder: "your_folder_name", // The name of the folder in Cloudinary
-    format: async (req, file) => 'png', // supports promises as well
+    folder: "E-COMMERCE", // The name of the folder in Cloudinary
+    format: async (req, file) => "png, jpg, jpeg, webp", // supports promises as well
     public_id: (req, file) => `${file.fieldname}-${Date.now()}`, // The name of the file within the folder
   },
 });
