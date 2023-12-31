@@ -32,7 +32,7 @@ const router = createBrowserRouter(
   createRoutesFromChildren(
     <Route path="/" element={<App />}>
       <Route path="" element={<PrivateRoute />}>
-        <Route path="/profile" element={<Profile />} />
+        <Route path="/account" element={<Profile />} />
         <Route path="/shipping" element={<Shipping />} />
         <Route path="/placeorder" element={<PlaceOrder />} />
         <Route path="/order/:id" element={<Order />} />

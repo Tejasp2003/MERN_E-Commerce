@@ -5,8 +5,10 @@ import {
   AiOutlineLogin,
   AiOutlineUserAdd,
   AiOutlineShoppingCart,
+  AiOutlineMenu,
+  AiOutlineClose,
 } from "react-icons/ai";
-import { FaHeart } from "react-icons/fa";
+import { FaHeart, FaUserPlus } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useLogoutMutation } from "../../redux/api/usersApiSlice.js";
@@ -17,13 +19,10 @@ import FavoritesCount from "../Products/FavoritesCount.jsx";
 
 const Navigation = () => {
   const { userInfo } = useSelector((state) => state.auth);
-  const [openDropdown, setOpenDropdown] = useState(false);
-  const [showSidebar, setShowSidebar] = useState(false);
+
   const cartItems = useSelector((state) => state.cart.cartItems);
 
-  const toggleDropdown = () => {
-    setOpenDropdown(!openDropdown);
-  };
+  const [showSidebar, setShowSidebar] = useState(false);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -41,212 +40,154 @@ const Navigation = () => {
   };
 
   return (
-    // <div
-    //   style={{ zIndex: 9999 }}
-    //   // classes for responsive design using tailwindcss framework to make the navbar responsive and hide it on small screens and add a toggle button to show it
-    //   className="fixed top-0 left-0 z-50 w-[80px] h-full bg-gray-800 text-white flex flex-col justify-between items-center transition-all duration-300 ease-in-out md:w-[200px] md:flex-row md:justify-between md:items-center md:h-[80px]"
-    // >
-    //   <div className="flex justify-between items-center w-full">
-    //     <Link to="/" className="flex items-center">
-    //       <img
-    //         src="/images/logo.png"
-    //         alt="logo"
-    //         className="w-[50px] h-[50px] md:w-[100px] md:h-[100px]"
-    //       />
-    //       <span className="hidden nav-item-name">E-Commerce</span>
-    //     </Link>
+    <>
+      <nav className="hidden lg:flex flex-row w-full justify-between items-center p-4 bg-rose-400 z-100">
+        {/* Links */}
+        {/* Links will be Home, Favorites, Cart, My Orders, Account, Logout */}
 
-    //     <button
-    //       onClick={() => setShowSidebar(!showSidebar)}
-    //       className="md:hidden focus:outline-none"
-    //     >
-    //       <svg
-    //         xmlns="http://www.w3.org/2000/svg"
-    //         className="h-6 w-6 text-white"
-    //         fill="none"
-    //         viewBox="0 0 24 24"
-    //         stroke="white"
-    //       >
-    //         <path
-    //           strokeLinecap="round"
-    //           strokeLinejoin="round"
-    //           strokeWidth={2}
-    //           d={
-    //             showSidebar ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"
-    //           }
-    //         />
-    //       </svg>
-    //     </button>
-    //   </div>
+        <div className="flex flex-row w-full !justify-between">
+          <div className="flex items-center justify-between space-x-3">
+            <Link to="/">
+              <h1 className="text-3xl font-bold text-white">E-Kart</h1>
+            </Link>
+            <Link
+              to="/"
+              className="flex items-center justify-start   hover:bg-rose-200 pl-3 rounded-md hover:scale-110 transform transition duration-300 ease-in-out"
+            >
+              <AiOutlineHome className="" size={26} />
+              <span className="">HOME</span>{" "}
+            </Link>
 
-    //   <div className="flex flex-col justify-center space-y-4">
-    //     <Link
-    //       to="/"
-    //       className="flex items-center transition-transform transform hover:translate-x-2"
-    //     >
-    //       <AiOutlineHome className="mr-2 mt-[3rem]" size={26} />
-    //       <span className="hidden nav-item-name mt-[3rem]">HOME</span>{" "}
-    //     </Link>
+            <Link
+              to="/cart"
+              className="flex items-center justify-start   hover:bg-rose-200 pl-3 rounded-md hover:scale-110 transform transition duration-300 ease-in-out "
+            >
+              <AiOutlineShoppingCart className="" size={26} />
+              <span className="">CART</span>{" "}
+            </Link>
 
-    //     <Link
-    //       to="/shop"
-    //       className="flex items-center transition-transform transform hover:translate-x-2"
-    //     >
-    //       <AiOutlineShopping className="mr-2 mt-[3rem]" size={26} />
-    //       <span className="hidden nav-item-name mt-[3rem]">SHOP</span>{" "}
-    //     </Link>
+            <Link
+              to="/favorites"
+              className="flex items-center justify-start  hover:bg-rose-200 pl-3 rounded-md hover:scale-110 transform transition duration-300 ease-in-out"
+            >
+              <FaHeart className="" size={20} />
+              <span className="">FAVORITES</span>{" "}
+            </Link>
 
-    //     <Link to="/cart" className="flex relative">
-    //       <div className="flex items-center transition-transform transform hover:translate-x-2">
-    //         <AiOutlineShoppingCart className="mt-[3rem] mr-2" size={26} />
-    //         <span className="hidden nav-item-name mt-[3rem]">Cart</span>{" "}
-    //       </div>
+            <Link
+              to="/user-orders"
+              className="flex items-center justify-start  hover:bg-rose-200 pl-3 rounded-md hover:scale-110 transform transition duration-300 ease-in-out"
+            >
+              <AiOutlineShopping className="" size={26} />
+              <span className=""> MY ORDERS</span>{" "}
+            </Link>
 
-    //       <div className="absolute top-9">
-    //         {cartItems.length > 0 && (
-    //           <span>
-    //             <span className="px-1 py-0 text-sm text-white bg-pink-500 rounded-full">
-    //               {cartItems.reduce((a, c) => a + c.qty, 0)}
-    //             </span>
-    //           </span>
-    //         )}
-    //       </div>
-    //     </Link>
+            <Link
+              to="/account"
+              className="flex items-center justify-start  hover:bg-rose-200 pl-3 rounded-md hover:scale-110 transform transition duration-300 ease-in-out"
+            >
+              <AiOutlineUserAdd className="" size={26} />
+              <span className="">ACCOUNT</span>{" "}
+            </Link>
+          </div>
 
-    //     <Link to="/favorites" className="flex relative">
-    //       <div className="flex justify-center items-center transition-transform transform hover:translate-x-2">
-    //         <FaHeart className="mt-[3rem] mr-2" size={20} />
-    //         <span className="hidden nav-item-name mt-[3rem]">
-    //           Favorites
-    //         </span>{" "}
-    //         <FavoritesCount />
-    //       </div>
-    //     </Link>
-    //   </div>
+          {userInfo ? (
+            <button
+              onClick={logoutHandler}
+              className="flex items-center justify-start  hover:bg-rose-200 pl-3 rounded-md ml-5 hover:scale-110 transform transition duration-300 ease-in-out "
+            >
+              <AiOutlineLogin className="mr-2" size={26} />
+              <span className="">LOGOUT</span>{" "}
+            </button>
+          ) : (
+            <Link
+              to="/login"
+              className="flex items-center justify-start  hover:bg-rose-200 pl-3 rounded-md ml-5 hover:scale-110 transform transition duration-300 ease-in-out "
+            >
+              <AiOutlineLogin className="mr-2" size={26} />
+              <span className="">LOGIN</span>{" "}
+            </Link>
+          )}
+        </div>
+      </nav>
 
-    //   <div className="relative">
-    //     <button
-    //       onClick={toggleDropdown}
-    //       className="flex items-center text-gray-800 focus:outline-none"
-    //     >
-    //       {userInfo ? (
-    //         <span className="text-white">{userInfo.username}</span>
-    //       ) : (
-    //         <></>
-    //       )}
-    //       {userInfo && (
-    //         <svg
-    //           xmlns="http://www.w3.org/2000/svg"
-    //           className={`h-4 w-4 ml-1 ${
-    //             openDropdown ? "transform rotate-180" : ""
-    //           }`}
-    //           fill="none"
-    //           viewBox="0 0 24 24"
-    //           stroke="white"
-    //         >
-    //           <path
-    //             strokeLinecap="round"
-    //             strokeLinejoin="round"
-    //             strokeWidth="2"
-    //             d={openDropdown ? "M5 15l7-7 7 7" : "M19 9l-7 7-7-7"}
-    //           />
-    //         </svg>
-    //       )}
-    //     </button>
+      <div className="lg:hidden z-[999] w-full flex! flex-row! justify-between! items-center! ">
+        <div
+          className={`lg:hidden flex items-center justify-center rounded-3xl fixed top-8 left-5 w-10 h-10 z-[500] cursor-pointer ${
+            showSidebar
+              ? "bg-rose-400"
+              : "bg-rose-300  transition duration-300 ease-in-out"
+          }`}
+          onClick={() => setShowSidebar(!showSidebar)}
+        >
+          {showSidebar ? <AiOutlineClose /> : <AiOutlineMenu />}
+        </div>
+        <div className="flex items-center justify-center h-[15vh]">
+          <h1 className="text-2xl font-bold text-black">E-Kart</h1>
+        </div>
+      </div>
 
-    //     {openDropdown && userInfo && (
-    //       <ul
-    //         className={`absolute right-0 mt-2 mr-14 space-y-2 bg-white text-gray-600 ${
-    //           !userInfo.isAdmin ? "-top-20" : "-top-80"
-    //         } `}
-    //       >
-    //         {userInfo.isAdmin && (
-    //           <>
-    //             <li>
-    //               <Link
-    //                 to="/admin/dashboard"
-    //                 className="block px-4 py-2 hover:bg-gray-100"
-    //               >
-    //                 Dashboard
-    //               </Link>
-    //             </li>
-    //             <li>
-    //               <Link
-    //                 to="/admin/productlist"
-    //                 className="block px-4 py-2 hover:bg-gray-100"
-    //               >
-    //                 Products
-    //               </Link>
-    //             </li>
-    //             <li>
-    //               <Link
-    //                 to="/admin/categorylist"
-    //                 className="block px-4 py-2 hover:bg-gray-100"
-    //               >
-    //                 Category
-    //               </Link>
-    //             </li>
-    //             <li>
-    //               <Link
-    //                 to="/admin/orderlist"
-    //                 className="block px-4 py-2 hover:bg-gray-100"
-    //               >
-    //                 Orders
-    //               </Link>
-    //             </li>
-    //             <li>
-    //               <Link
-    //                 to="/admin/userlist"
-    //                 className="block px-4 py-2 hover:bg-gray-100"
-    //               >
-    //                 Users
-    //               </Link>
-    //             </li>
-    //           </>
-    //         )}
+      {showSidebar && (
+        <div className="lg:hidden flex flex-col items-center justify-center h-[100vh] w-[100vw] bg-rose-300 z-500 transition duration-300 ease-in-out">
+          {/* Logo */}
+          <div className="flex items-center justify-center h-[15vh]">
+            <Link to="/">
+              <h1 className="text-3xl font-bold text-white">E-Kart</h1>
+            </Link>
+          </div>
 
-    //         <li>
-    //           <Link to="/profile" className="block px-4 py-2 hover:bg-gray-100">
-    //             Profile
-    //           </Link>
-    //         </li>
-    //         <li>
-    //           <button
-    //             onClick={logoutHandler}
-    //             className="block w-full px-4 py-2 text-left hover:bg-gray-100"
-    //           >
-    //             Logout
-    //           </button>
-    //         </li>
-    //       </ul>
-    //     )}
-    //     {!userInfo && (
-    //       <ul>
-    //         <li>
-    //           <Link
-    //             to="/login"
-    //             className="flex items-center mt-5 transition-transform transform hover:translate-x-2"
-    //           >
-    //             <AiOutlineLogin className="mr-2 mt-[4px]" size={26} />
-    //             <span className="hidden nav-item-name">LOGIN</span>
-    //           </Link>
-    //         </li>
-    //         <li>
-    //           <Link
-    //             to="/register"
-    //             className="flex items-center mt-5 transition-transform transform hover:translate-x-2"
-    //           >
-    //             <AiOutlineUserAdd size={26} />
-    //             <span className="hidden nav-item-name">REGISTER</span>
-    //           </Link>
-    //         </li>
-    //       </ul>
-    //     )}
-    //   </div>
-    // </div>
+          <div className="flex flex-col justify-start items-center  h-[70vh]  space-y-2">
+            <Link
+              to="/"
+              className="flex items-center justify-center   hover:bg-rose-200 p-3 rounded-md  hover:scale-110 transform transition duration-300 ease-in-out"
+            >
+              <AiOutlineHome className="mr-2" size={26} />
+              <span className="">HOME</span>{" "}
+            </Link>
 
+            <Link
+              to="/cart"
+              className="flex items-center justify-center   hover:bg-rose-200 p-3 rounded-md hover:scale-110 transform transition duration-300 ease-in-out"
+            >
+              <AiOutlineShoppingCart className="mr-2" size={26} />
+              <span className="">CART</span>{" "}
+            </Link>
 
-    
+            <Link
+              to="/favorites"
+              className="flex items-center justify-center  hover:bg-rose-200 p-3 rounded-md hover:scale-110 transform transition duration-300 ease-in-out"
+            >
+              <FaHeart className="mr-2" size={45} />
+              <span className="">FAVORITES</span>{" "}
+            </Link>
+
+            <Link
+              to="/user-orders"
+              className="flex items-center justify-center  hover:bg-rose-200 p-3 rounded-md hover:scale-110 transform transition duration-300 ease-in-out"
+            >
+              <AiOutlineShopping className="mr-2" size={26} />
+              <span className="">ORDERS</span>{" "}
+            </Link>
+
+            <Link
+              to="/account"
+              className="flex items-center justify-center  hover:bg-rose-200 p-3 rounded-md hover:scale-110 transform transition duration-300 ease-in-out"
+            >
+              <FaUserPlus className="mr-2" size={50} />
+              <span className="">ACCOUNT</span>{" "}
+            </Link>
+
+            <button
+              onClick={logoutHandler}
+              className="flex items-center justify-center  hover:bg-rose-200 p-3 rounded-md hover:scale-110 transform transition duration-300 ease-in-out"
+            >
+              <AiOutlineLogin className="mr-2" size={26} />
+              <span className="">LOGOUT</span>{" "}
+            </button>
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 

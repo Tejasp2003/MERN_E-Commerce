@@ -15,7 +15,7 @@ const AdminProductUpdate = () => {
 
   const { data: productData, refetch } = useGetProductByIdQuery(params._id);
 
-  console.log("Product Data", productData)
+  console.log("Product Data", productData);
 
   console.log(productData);
 
@@ -29,8 +29,8 @@ const AdminProductUpdate = () => {
   const [quantity, setQuantity] = useState(productData?.quantity || "");
   const [brand, setBrand] = useState(productData?.brand || "");
   const [stock, setStock] = useState(productData?.countInStock || "");
-  console.log("Product Data", productData)
-  console.log("Categoryjyfgyuf", category)
+  console.log("Product Data", productData);
+  console.log("Categoryjyfgyuf", category);
   // hook
   const navigate = useNavigate();
 
@@ -45,15 +45,12 @@ const AdminProductUpdate = () => {
   // Define the delete product mutation
   const [deleteProduct] = useDeleteProductMutation();
 
-  
-
-
   useEffect(() => {
     if (productData && productData._id) {
       setName(productData.name);
       setDescription(productData.description);
       setPrice(productData.price);
-     setCategory(categories.find((c) => c._id === productData.category)?._id);
+      setCategory(categories.find((c) => c._id === productData.category)?._id);
       setQuantity(productData.quantity);
       setBrand(productData.brand);
       setImage(productData.image);
@@ -61,17 +58,17 @@ const AdminProductUpdate = () => {
     }
   }, [productData, categories]);
 
-  const uploadFileHandler = async (e) => {
-    const formData = new FormData();
-    formData.append("image", e.target.files[0]);
-    try {
-      const res = await uploadProductImage(formData).unwrap();
-      toast.success("Item added successfully");
-      setImage(res.imageUrl);
-    } catch (err) {
-      toast.success("Item added successfully");
-    }
-  };
+  // const uploadFileHandler = async (e) => {
+  //   const formData = new FormData();
+  //   formData.append("image", e.target.files[0]);
+  //   try {
+  //     const res = await uploadProductImage(formData).unwrap();
+  //     toast.success("Item added successfully");
+  //     setImage(res.imageUrl);
+  //   } catch (err) {
+  //     toast.success("Item added successfully");
+  //   }
+  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -85,10 +82,10 @@ const AdminProductUpdate = () => {
       formData.append("quantity", quantity);
       formData.append("brand", brand);
       formData.append("countInStock", stock);
-      console.log("Category", category)
+      console.log("Category", category);
 
       // Update product using the RTK Query mutation
-      const {data} = await updateProduct({ productId: params._id, formData });
+      const { data } = await updateProduct({ productId: params._id, formData });
 
       if (data?.error) {
         toast.error(data.error);
@@ -109,10 +106,10 @@ const AdminProductUpdate = () => {
       );
       if (!answer) return;
 
-      const {data} = await deleteProduct(params._id);
-      console.log("Delete: ",data);
+      const { data } = await deleteProduct(params._id);
+      console.log("Delete: ", data);
       toast.success(`"${data?.name}" is deleted`);
-      
+
       navigate("/admin/allproductslist");
       refetch();
     } catch (err) {
@@ -120,6 +117,39 @@ const AdminProductUpdate = () => {
       toast.error("Delete failed. Try again.");
     }
   };
+
+  const openCloudinaryWidget = () => {
+    window.cloudinary.openUploadWidget(
+      {
+        cloudName: "dh8gfmbp2",
+        uploadPreset: "embmj1ia",
+        sources: ["local", "url", "camera"],
+        cropping: true,
+        multiple: false,
+        folder: "E-COMMERCE",
+        tags: ["Products"],
+      },
+      (error, result) => {
+        if (!error && result && result.event === "success") {
+          console.log("Upload Success:", result.info);
+
+          setImage(result.info.secure_url);
+          toast.success("Image uploaded successfully");
+        } else if (error) {
+          toast.error(error?.data?.message || error.error);
+        }
+      }
+    );
+  };
+
+  useEffect(() => {
+    if (!window.cloudinary) {
+      const script = document.createElement("script");
+      script.src = "https://upload-widget.cloudinary.com/global/all.js";
+      script.async = true;
+      document.body.appendChild(script);
+    }
+  }, []);
 
   return (
     <>
@@ -139,17 +169,13 @@ const AdminProductUpdate = () => {
               </div>
             )}
 
-            <div className="mb-3">
-              <label className="text-white  py-2 px-4 block w-full text-center rounded-lg cursor-pointer font-bold py-11">
-                {image ? image.name : "Upload image"}
-                <input
-                  type="file"
-                  name="image"
-                  accept="image/*"
-                  onChange={uploadFileHandler}
-                  className="text-white"
-                />
-              </label>
+            <div className="mb-6">
+              <button
+                className="border text-white bg-blue-500 hover:bg-blue-700 px-4 block w-full text-center rounded-lg cursor-pointer font-bold py-2"
+                onClick={openCloudinaryWidget}
+              >
+                Upload Image
+              </button>
             </div>
 
             <div className="p-3">
@@ -160,7 +186,6 @@ const AdminProductUpdate = () => {
                     type="text"
                     className="p-4 mb-3 w-[30rem] border rounded-lg bg-[#101011] text-white mr-[5rem]"
                     value={name}
-
                     onChange={(e) => setName(e.target.value)}
                   />
                 </div>
@@ -226,9 +251,6 @@ const AdminProductUpdate = () => {
                     className="p-4 mb-3 w-[30rem] border rounded-lg bg-[#101011] text-white mr-[5rem]"
                     onChange={(e) => setCategory(e.target.value)}
                     value={category}
-                
-                    
-                    
                   >
                     <option value="">Select Category</option>
                     {categories?.map((category) => (

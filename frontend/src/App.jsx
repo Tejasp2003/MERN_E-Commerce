@@ -8,10 +8,12 @@ const App = () => {
     <>
    
     <Toaster />
-    <Navigation />
-    <main className='py-3'>
-      <Outlet />
-    </main>
+    <div className="">
+      <Navigation />
+      <main className='py-3 overflow-x-hidden'>
+        <Outlet />
+      </main>
+    </div>
     </>
   )
 }

@@ -4,23 +4,20 @@ import Header from "../components/Header.jsx";
 import { useGetProductsQuery } from "../redux/api/productApiSlice.js";
 import Loader from "../components/Loader.jsx";
 import Product from "./Products/Product.jsx";
+import ProductCarousel from "./Products/ProductCarsousel.jsx";
 
 const Home = () => {
   const { keyword } = useParams();
-  const { data, isLoading, isError } = useGetProductsQuery({ keyword });
+  const { data} = useGetProductsQuery({ keyword });
 
   return (
-    <>
-      {!keyword ? <Header /> : null}
-      {isLoading ? (
-        <Loader />
-      ) : isError ? (
-        <Message variant="danger">
-          {isError?.data.message || isError.error}
-        </Message>
-      ) : (
+  
         <>
-          <div className="flex justify-between items-center">
+        
+
+        <ProductCarousel />
+        
+          {/* <div className="flex justify-between items-center">
             <h1 className="ml-[20rem] mt-[10rem] text-[3rem]">
               Special Products
             </h1>
@@ -35,17 +32,16 @@ const Home = () => {
 
           <div>
             <div className="flex justify-center flex-wrap mt-[2rem]">
-              {data.products.map((product) => (
+              {data && data?.products?.map((product) => (
                 <div key={product._id}>
                   
                   <Product product={product} />
                 </div>
               ))}
             </div>
-          </div>
+          </div> */}
         </>
-      )}
-    </>
+
   );
 };
 
