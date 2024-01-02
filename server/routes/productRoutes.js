@@ -15,12 +15,17 @@ import {
   addProductReview,
   fetchTopProducts,
   fetchNewProducts,
-  filterProducts
+  filterProducts,
+  getProductByCategory,
+  getBrandsUsingCategory
 } from "../controllers/productController.js";
 
 const router = express.Router();
 
+router.route("/product-brands").get(getBrandsUsingCategory);
+
 router.route("/allproducts").get(getAllProducts);
+
 router
   .route("/")
   .get(fetchProducts)
