@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-hot-toast";
-
 import Loader from "../../components/Loader";
 import { useProfileMutation } from "../../redux/api/usersApiSlice";
 import { setCredentials } from "../../redux/features/auth/authSlice";
@@ -37,8 +36,6 @@ const Profile = () => {
           email,
           password,
         }).unwrap();
-        console.log("username", username)
-        console.log(res);
         dispatch(setCredentials({ ...res }));
         toast.success("Profile updated successfully");
       } catch (err) {
@@ -48,73 +45,66 @@ const Profile = () => {
   };
 
   return (
-    <div className="container mx-auto p-4 mt-[10rem]">
-      <div className="flex justify-center align-center md:flex md:space-x-4">
-        <div className="md:w-1/3">
-          <h2 className="text-2xl font-semibold mb-4">Update Profile</h2>
-          <form onSubmit={submitHandler}>
-            <div className="mb-4">
-              <label className="block text-white mb-2">Name</label>
-              <input
-                type="text"
-                placeholder="Enter name"
-                className="form-input p-4 rounded-sm w-full"
-                value={username}
-                onChange={(e) => setUserName(e.target.value)}
-              />
-            </div>
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 -mt-9">
+      <div className="w-full sm:w-11/12 m-2 md:w-4/5 lg:w-2/3 xl:w-1/2 bg-rose-100 p-6 rounded-xl shadow-md">
+        <h2 className="text-2xl font-semibold mb-4 text-center">
+          Update Profile
+        </h2>
+        <form onSubmit={submitHandler}>
+          <div className="mb-4">
+            <label className="block text-gray-600 mb-2">Name</label>
+            <input
+              type="text"
+              placeholder="Enter name"
+              className="form-input p-3 w-full rounded-md border focus:outline-none focus:ring focus:border-blue-300"
+              value={username}
+              onChange={(e) => setUserName(e.target.value)}
+            />
+          </div>
 
-            <div className="mb-4">
-              <label className="block text-white mb-2">Email Address</label>
-              <input
-                type="email"
-                placeholder="Enter email"
-                className="form-input p-4 rounded-sm w-full"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
+          <div className="mb-4">
+            <label className="block text-gray-600 mb-2">Email Address</label>
+            <input
+              type="email"
+              placeholder="Enter email"
+              className="form-input p-3 w-full rounded-md border focus:outline-none focus:ring focus:border-blue-300"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
 
-            <div className="mb-4">
-              <label className="block text-white mb-2">Password</label>
-              <input
-                type="password"
-                placeholder="Enter password"
-                className="form-input p-4 rounded-sm w-full"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
+          <div className="mb-4">
+            <label className="block text-gray-600 mb-2">Password</label>
+            <input
+              type="password"
+              placeholder="Enter password"
+              className="form-input p-3 w-full rounded-md border focus:outline-none focus:ring focus:border-blue-300"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
 
-            <div className="mb-4">
-              <label className="block text-white mb-2">Confirm Password</label>
-              <input
-                type="password"
-                placeholder="Confirm password"
-                className="form-input p-4 rounded-sm w-full"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-              />
-            </div>
+          <div className="mb-4">
+            <label className="block text-gray-600 mb-2">Confirm Password</label>
+            <input
+              type="password"
+              placeholder="Confirm password"
+              className="form-input p-3 w-full rounded-md border focus:outline-none focus:ring focus:border-blue-300"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            />
+          </div>
 
-            <div className="flex justify-between">
-              <button
-                type="submit"
-                className="bg-pink-500 text-white py-2 px-4 rounded hover:bg-pink-600"
-              >
-                Update
-              </button>
-
-              <Link
-                to="/user-orders"
-                className="bg-pink-600 text-white py-2 px-4 rounded hover:bg-pink-700"
-              >
-                My Orders
-              </Link>
-            </div>
-            {loadingUpdateProfile && <Loader />}
-          </form>
-        </div>
+          <div className="mb-4">
+            <button
+              type="submit"
+              className="w-full bg-rose-500 text-white py-2 px-4 rounded-md hover:bg-rose-600"
+            >
+              Update
+            </button>
+          </div>
+        </form>
+        {loadingUpdateProfile && <Loader />}
       </div>
     </div>
   );

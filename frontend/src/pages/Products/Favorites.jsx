@@ -5,12 +5,12 @@ const Favorites = () => {
   const {data: favProducts} = useGetUserFavoriteProductsQuery();
 
   return (
-    <div className="ml-[10rem]">
-      <h1 className="text-lg font-bold ml-[3rem] mt-[3rem]">
+    <div className="m-3">
+      <h1 className="text-lg font-bold ml-3 mb-5 ">
         FAVORITE PRODUCTS ({favProducts?.length })
-      </h1>
+      </h1> 
 
-      <div className="flex flex-wrap">
+      <div className="flex flex-wrap gap-5">
         {favProducts?.map((product) => (
           <ProductCard key={product._id} product={product} />
         ))}

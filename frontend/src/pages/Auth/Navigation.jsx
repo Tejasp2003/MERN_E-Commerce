@@ -17,6 +17,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useLogoutMutation } from "../../redux/api/usersApiSlice.js";
 import { logout } from "../../redux/features/auth/authSlice.js";
 import Search from "../../components/Search.jsx";
+import FavoritesCount from "../Products/FavoritesCount.jsx";
 
 
 const Navigation = () => {
@@ -68,14 +69,16 @@ const Navigation = () => {
         </div>
         <div className="flex flex-row space-x-6 mr-6">
           <Link to="/cart" className="flex items-center justify-start realtive">
-
             <span className="absolute top-[0.78rem] right-[153px] bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
               {cartItems.length}
             </span>
             <AiOutlineShoppingCart size={26} />
           </Link>
 
-          <Link to="/favorite" className="flex items-center justify-start">
+          <Link to="/favorites" className="flex items-center justify-start">
+            <div className="relative">
+              <FavoritesCount />
+            </div>
             <AiOutlineHeart size={26} />
           </Link>
           {userInfo ? (
@@ -99,7 +102,7 @@ const Navigation = () => {
         {dropdownOpen && (
           <div className="absolute top-16 right-2 p-3 space-y-4 w-40 bg-rose-200 rounded-md z-50">
             <Link
-              to="/profile"
+              to="/account"
               className="flex items-center justify-start gap-2  rounded-md"
             >
               <AiOutlineUserAdd size={23} />
@@ -159,7 +162,7 @@ const Navigation = () => {
             </Link>
 
             <Link
-              to="/favorite"
+              to="/favorites"
               className="flex items-center gap-2 justify-center  hover:bg-rose-200 p-3 rounded-md hover:scale-110 transform transition duration-300 ease-in-out"
             >
               <AiOutlineHeart size={26} />
@@ -175,7 +178,7 @@ const Navigation = () => {
             </Link>
 
             <Link
-              to="/profile"
+              to="/account"
               className="flex items-center justify-center gap-2 hover:bg-rose-200 p-3 rounded-md hover:scale-110 transform transition duration-300 ease-in-out"
             >
               <AiOutlineUserAdd className="mr-2" size={26} />
