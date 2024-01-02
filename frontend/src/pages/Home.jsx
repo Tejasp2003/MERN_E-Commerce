@@ -5,19 +5,18 @@ import { useGetProductsQuery } from "../redux/api/productApiSlice.js";
 import Loader from "../components/Loader.jsx";
 import Product from "./Products/Product.jsx";
 import ProductCarousel from "./Products/ProductCarsousel.jsx";
+import CategoryCarousel from "./Category/CategoryCarousel.jsx";
 
 const Home = () => {
   const { keyword } = useParams();
-  const { data} = useGetProductsQuery({ keyword });
+  const { data } = useGetProductsQuery({ keyword });
 
   return (
-  
-        <>
-        
+    <>
+      <CategoryCarousel />
+      <ProductCarousel />
 
-        <ProductCarousel />
-        
-          {/* <div className="flex justify-between items-center">
+      {/* <div className="flex justify-between items-center">
             <h1 className="ml-[20rem] mt-[10rem] text-[3rem]">
               Special Products
             </h1>
@@ -40,8 +39,7 @@ const Home = () => {
               ))}
             </div>
           </div> */}
-        </>
-
+    </>
   );
 };
 

@@ -32,6 +32,8 @@ export const categoryApiSlice = apiSlice.injectEndpoints({
         method: "GET",
       }),
     }),
+
+    
   }),
 });
 

@@ -1,4 +1,6 @@
-const Modal = ({ isOpen, onClose, children }) => {
+const Modal = ({ isOpen, onClose, children}) => {
+
+  console.log(children);
     return (
       <>
         {isOpen && (
@@ -11,6 +13,7 @@ const Modal = ({ isOpen, onClose, children }) => {
               >
                 X
               </button>
+              
               {children}
             </div>
           </div>

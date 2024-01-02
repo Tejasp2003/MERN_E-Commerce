@@ -27,6 +27,7 @@ import Order from "./pages/Orders/Order.jsx";
 import UserOrder from "./pages/User/UserOrder.jsx";
 import OrderList from "./pages/Admin/OrderList.jsx";
 import AdminDashboard from "./pages/Admin/AdminDashboard.jsx";
+import ProductsPage from "./pages/Products/ProductsPage.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromChildren(
@@ -43,6 +44,7 @@ const router = createBrowserRouter(
       <Route path="/" index={true} element={<Home />} />
       <Route path="/favorites" element={<Favorites />} />
       <Route path="/product/:id" element={<ProductDetails />} />
+      <Route path="/products" element={<ProductsPage />} />
       <Route path="/cart" element={<Cart />} />
       <Route path="/shop" element={<Shop />} />
       <Route path="/user-orders" element={<UserOrder />} />

@@ -1,10 +1,8 @@
-
-import Product from "./Product";
 import { useGetUserFavoriteProductsQuery } from "../../redux/api/usersApiSlice.js";
+import ProductCard from "./ProductCard.jsx";
 
 const Favorites = () => {
   const {data: favProducts} = useGetUserFavoriteProductsQuery();
-  console.log(favProducts)
 
   return (
     <div className="ml-[10rem]">
@@ -14,7 +12,7 @@ const Favorites = () => {
 
       <div className="flex flex-wrap">
         {favProducts?.map((product) => (
-          <Product key={product._id} product={product} />
+          <ProductCard key={product._id} product={product} />
         ))}
       </div>
     </div>

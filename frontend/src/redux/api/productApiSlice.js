@@ -4,11 +4,10 @@ import { apiSlice } from "./apiSlice";
 export const productApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getProducts: builder.query({
-      query: ({ keyword }) => ({
+      query: ({category}) => ({
         url: `${PRODUCT_URL}`,
-        params: { keyword },
+        params: {category}
       }),
-      // keepUnusedDataFor: 5,
       providesTags: ["Products"],
     }),
 
@@ -27,17 +26,13 @@ export const productApiSlice = apiSlice.injectEndpoints({
       query: (productId) => ({
         url: `${PRODUCT_URL}/${productId}`,
       }),
-      keepUnusedDataFor: 5,
     }),
 
     createProduct: builder.mutation({
-
       query: (productData) => ({
-      
         url: `${PRODUCT_URL}`,
         method: "POST",
         body: productData,
-
       }),
       invalidatesTags: ["Product"],
     }),
@@ -76,19 +71,25 @@ export const productApiSlice = apiSlice.injectEndpoints({
 
     getTopProducts: builder.query({
       query: () => `${PRODUCT_URL}/top`,
-      keepUnusedDataFor: 5,
     }),
 
     getNewProducts: builder.query({
       query: () => `${PRODUCT_URL}/new`,
-      keepUnusedDataFor: 5, // it is used to keep the data in the store for 5 seconds
+      // it is used to keep the data in the store for 5 seconds
     }),
 
     getFilteredProducts: builder.query({
-      query: ({ checked, radio }) => ({
+      query: (filter) => ({
         url: `${PRODUCT_URL}/filtered-products`,
         method: "POST",
-        body: { checked, radio },
+        body: filter,
+      }),
+    }),
+
+    getBrandsUsingCategory: builder.query({
+      query: ({category}) => ({
+        url: `${PRODUCT_URL}/product-brands`,
+        params: {category}
       }),
     }),
   }),
@@ -107,4 +108,5 @@ export const {
   useGetNewProductsQuery,
   useUploadProductImageMutation,
   useGetFilteredProductsQuery,
+  useGetBrandsUsingCategoryQuery
 } = productApiSlice;

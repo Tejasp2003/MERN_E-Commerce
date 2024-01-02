@@ -10,7 +10,7 @@ const ProductCarousel = () => {
     if (width < 640) return 1; // xs: For very small screens, show 1 item
     if (width < 768) return 2; // sm: For small screens, show 2 items
     if (width < 1024) return 3; // md: For medium screens, show 3 items
-    return 4; // lg: For large screens and up, show 4 items
+    return 5; // lg: For large screens and up, show 4 items
   };
 
   const { data: products, isLoading, error } = useGetTopProductsQuery();
@@ -62,7 +62,7 @@ const ProductCarousel = () => {
 
   console.log("Current Index", currentIndex);
   return (
-    <div className="rounded-lg relative pr-2 pl-2">
+    <div className="rounded-lg relative pr-2 pl-2 mt-6">
       {isLoading ? (
         // Loading state
         <p>Loading...</p>
@@ -72,7 +72,7 @@ const ProductCarousel = () => {
         </Message>
       ) : (
         <>
-          <div>
+          <div >
             <h1
               className="
               text-2xl
@@ -100,7 +100,7 @@ const ProductCarousel = () => {
             <FaCircleChevronRight />
           </button>
 
-          <div className="flex flex-row justify-center items-center overflow-hidden transition-transform duration-500 !pr-8">
+          <div className="flex flex-row justify-center items-center overflow-hidden transition-transform duration-500">
             {getVisibleProducts().map((product) => (
               <ProductHeaderCard
                 key={product._id}
