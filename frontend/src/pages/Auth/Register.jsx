@@ -29,17 +29,17 @@ const Register = () => {
       toast.error("Passwords do not match");
       return;
     }
+
     try {
       const data = await register({
         username: userName,
         email,
         password,
-      }).unwrap(); // unwrap is used to get the actual data from the promise
+      }).unwrap();
       dispatch(setCredentials({ ...data }));
       navigate(redirect);
       toast.success("Registered successfully");
     } catch (error) {
-      console.log(error);
       toast.error(error.data.message);
     }
   };
@@ -51,73 +51,66 @@ const Register = () => {
   }, [userInfo, navigate, redirect]);
 
   return (
-    <section className="pl-[10rem] flex flex-wrap">
-      <div className="mr-[4rem] mt-[5rem]">
-        <h1 className="text-2xl font-semibold mb-4">Register</h1>
+    <div className="flex justify-center items-center min-h-screen -mt-9 bg-rose-100">
+      <div className="bg-white p-8 rounded-xl shadow-xl w-full max-w-md">
+        <h1 className="text-3xl font-semibold mb-6 text-center text-pink-500">
+          Register to E-KART
+        </h1>
 
-        <form onSubmit={submitHandler} className="container w-[40rem]">
-          <div className="my-[2rem]">
-            <label
-              htmlFor="name"
-              className="block text-sm font-medium text-white"
-            >
+        <form onSubmit={submitHandler} className="space-y-4">
+          <div>
+            <label htmlFor="name" className="block text-sm text-gray-600">
               Name
             </label>
             <input
               type="text"
               id="name"
-              className="mt-1 p-2 border rounded w-full"
+              className="mt-1 p-2 w-full border rounded-md"
               placeholder="Enter name"
               value={userName}
               onChange={(e) => setUserName(e.target.value)}
             />
           </div>
 
-          <div className="my-[2rem]">
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium text-white"
-            >
+          <div>
+            <label htmlFor="email" className="block text-sm text-gray-600">
               Email Address
             </label>
             <input
               type="email"
               id="email"
-              className="mt-1 p-2 border rounded w-full"
+              className="mt-1 p-2 w-full border rounded-md"
               placeholder="Enter email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
 
-          <div className="my-[2rem]">
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-white"
-            >
+          <div>
+            <label htmlFor="password" className="block text-sm text-gray-600">
               Password
             </label>
             <input
               type="password"
               id="password"
-              className="mt-1 p-2 border rounded w-full"
+              className="mt-1 p-2 w-full border rounded-md"
               placeholder="Enter password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
 
-          <div className="my-[2rem]">
+          <div>
             <label
               htmlFor="confirmPassword"
-              className="block text-sm font-medium text-white"
+              className="block text-sm text-gray-600"
             >
               Confirm Password
             </label>
             <input
               type="password"
               id="confirmPassword"
-              className="mt-1 p-2 border rounded w-full"
+              className="mt-1 p-2 w-full border rounded-md"
               placeholder="Confirm password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
@@ -127,7 +120,7 @@ const Register = () => {
           <button
             disabled={isLoading}
             type="submit"
-            className="bg-pink-500 text-white px-4 py-2 rounded cursor-pointer my-[1rem]"
+            className="bg-pink-500 text-white px-4 py-2 rounded-md cursor-pointer transition duration-300 hover:bg-pink-600 focus:outline-none focus:ring focus:border-pink-600"
           >
             {isLoading ? "Registering..." : "Register"}
           </button>
@@ -135,8 +128,8 @@ const Register = () => {
           {isLoading && <Loader />}
         </form>
 
-        <div className="mt-4">
-          <p className="text-white">
+        <div className="mt-4 text-center">
+          <p className="text-gray-600">
             Already have an account?{" "}
             <Link
               to={redirect ? `/login?redirect=${redirect}` : "/login"}
@@ -147,8 +140,7 @@ const Register = () => {
           </p>
         </div>
       </div>
-      
-    </section>
+    </div>
   );
 };
 

@@ -49,6 +49,7 @@ const Navigation = () => {
       await logoutApiCall().unwrap();
       dispatch(logout());
       navigate("/");
+      setDropdownOpen(false);
     } catch (error) {
       console.error(error);
     }
@@ -131,7 +132,7 @@ const Navigation = () => {
           className={`lg:hidden flex items-center justify-center rounded-3xl fixed top-8 left-5 w-10 h-10 z-[500] cursor-pointer ${
             showSidebar
               ? "bg-rose-400"
-              : "bg-rose-300  transition duration-300 ease-in-out"
+              : "bg-rose-300 transition duration-300 ease-in-out"
           }`}
           onClick={() => setShowSidebar(!showSidebar)}
         >
@@ -143,11 +144,11 @@ const Navigation = () => {
       </div>
 
       {showSidebar && (
-        <div className="md:hidden flex flex-col py-20 h-[100vh] w-[100vw] bg-rose-300 z-500 transition duration-300 ease-in-out">
+        <div className="lg:hidden flex flex-col py-20 h-[100vh] w-[100vw] bg-rose-300 z-500 transition duration-300 ease-in-out">
           <div className="flex flex-col justify-start items-center h-[70vh]  space-y-2">
             <Link
               to="/"
-              className="flex items-center gap-2 justify-center   hover:bg-rose-200 p-3 rounded-md  hover:scale-110 transform transition duration-300 ease-in-out"
+              className="flex items-center gap-2 justify-center hover:bg-rose-200 p-3 rounded-md hover:scale-110 transform transition duration-300 ease-in-out"
             >
               <AiOutlineHome size={26} />
               <span>HOME</span>{" "}

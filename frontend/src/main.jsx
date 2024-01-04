@@ -37,17 +37,17 @@ const router = createBrowserRouter(
         <Route path="/shipping" element={<Shipping />} />
         <Route path="/placeorder" element={<PlaceOrder />} />
         <Route path="/order/:id" element={<Order />} />
+        <Route path="/favorites" element={<Favorites />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/user-orders" element={<UserOrder />} />
       </Route>
 
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/" index={true} element={<Home />} />
-      <Route path="/favorites" element={<Favorites />} />
       <Route path="/product/:id" element={<ProductDetails />} />
       <Route path="/products" element={<ProductsPage />} />
-      <Route path="/cart" element={<Cart />} />
       <Route path="/shop" element={<Shop />} />
-      <Route path="/user-orders" element={<UserOrder />} />
 
       <Route path="/admin" element={<AdminRoute />}>
         <Route path="userlist" element={<UserList />} />
@@ -57,7 +57,7 @@ const router = createBrowserRouter(
         <Route path="allproductslist" element={<AllProducts />} />
         <Route path="orderlist" element={<OrderList />} />
         <Route path="product/update/:_id" element={<ProductUpdate />} />
-        <Route path="dashboard" element={<AdminDashboard/>} />
+        <Route path="dashboard" element={<AdminDashboard />} />
       </Route>
     </Route>
   )
