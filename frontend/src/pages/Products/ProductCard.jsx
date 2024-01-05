@@ -1,9 +1,8 @@
 import React from "react";
 import HeartIcon from "./HeartIcon";
-import { useDispatch } from "react-redux";
-import { addToCart } from "../../redux/features/cart/cartSlice.js";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { toast } from "react-hot-toast";
+import { useAddAndUpdateProductToCartMutation } from "../../redux/api/usersApiSlice.js";
 
 const backgroundColors = [
   "bg-red-200",
@@ -28,15 +27,21 @@ const backgroundColors = [
 
 let globalColorIndex = 0;
 const ProductCard = ({ product }) => {
-  const dispatch = useDispatch();
-  const handleAddToCart = () => {
-    dispatch(
-      addToCart({
-        ...product,
-        qty: 1,
-      })
-    );
-    toast.success("Added to cart");
+
+  const [addAndUpdateProductToCart] = useAddAndUpdateProductToCartMutation();
+
+  console.log(product);
+  
+  const handleAddToCart = async () => {
+    try {
+      await addAndUpdateProductToCart({
+        productId: product._id,
+        quantity: 1,
+      });
+      toast.success("Added to cart");
+    } catch (error) {
+      toast.error("Something went wrong.. Try again")
+    }
   };
 
   const currentBackgroundColor = backgroundColors[globalColorIndex];
@@ -47,9 +52,7 @@ const ProductCard = ({ product }) => {
 
   return (
     <div
-      className={`flex flex-row justify-center items-center relative h-[400px] rounded-lg ${currentBackgroundColor} p-2 shadow-slate-200 shadow-lg
- w-full sm:w-[300px] md:w-[300px] lg:w-[280px] 
-      `}
+      className={`flex flex-col justify-center items-center relative h-[400px] rounded-lg ${currentBackgroundColor} p-2 shadow-slate-200 shadow-lg `}
     >
       <div
         className="flex flex-col justify-center items-center "

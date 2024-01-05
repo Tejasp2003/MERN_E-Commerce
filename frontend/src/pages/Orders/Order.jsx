@@ -13,9 +13,15 @@ import {
 } from "../../redux/api/orderApiSlice";
 import Message from "../../components/Message";
 import { FaPaypal } from "react-icons/fa";
+import ReviewModal from "../../components/ReviewModal";
+import { FaStar } from "react-icons/fa6";
 
 const Order = () => {
   const { id: orderId } = useParams();
+  const [showModal, setShowModal] = useState(false);
+  const [clickedProductName, setClickedProductName] = useState(null);
+  const [clickedProductId, setClickedProductId] = useState(null);
+
   const {
     data: order,
     refetch,
@@ -119,8 +125,8 @@ const Order = () => {
   ) : error ? (
     <Message variant="danger">{error.data.message}</Message>
   ) : (
-    <div className="container flex flex-col md:flex-row m-2">
-      <div className="md:w-2/3 pr-4 md:border-r border-black">
+    <div className="container flex flex-col lg:flex-row m-2">
+      <div className="lg:w-2/3 pr-4 lg:border-r border-black">
         <div className="mt-5">
           {order.orderItems.length === 0 ? (
             <Message>Order is empty</Message>
@@ -134,38 +140,58 @@ const Order = () => {
                   (globalColorIndex + 1) % backgroundColors.length;
                 return (
                   <div
-                  key={index}
-                  className={`flex flex-col sm:flex-row p-5 rounded-xl ${currentBackgroundColor}`}
-                >
-                  <div className="flex flex-shrink-0 items-center justify-center">
-                    <img
-                      src={item.image}
-                      alt={item.name}
-                      className="w-24 h-24 object-fill rounded-full"
-                    />
+                    key={index}
+                    className={`flex flex-col sm:flex-row p-5 rounded-xl ${currentBackgroundColor}`}
+                  >
+                    {showModal ? (
+                      <ReviewModal
+                        isOpen={showModal}
+                        onClose={() => setShowModal(false)}
+                        productName={clickedProductName}
+                        productId={clickedProductId}
+                        userInfo={userInfo}
+                      />
+                    ) : null}
+                    <div className="flex flex-shrink-0 items-center justify-center">
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className="w-24 h-24 object-fill rounded-full"
+                      />
+                    </div>
+                    <div className="flex-grow space-y-1 pl-4">
+                      <p className="font-semibold text-xl">
+                        <Link to={`/product/${item.product}`}>
+                          {item.name.substring(0, 25) + "..."}
+                        </Link>
+                      </p>
+                      <p className="font-semibold">
+                        Quantity:{" "}
+                        <span className="font-normal">{item.qty}</span>
+                      </p>
+                      <p className="font-semibold">
+                        Unit Price:{" "}
+                        <span className="font-normal">$ {item.price}</span>
+                      </p>
+                      <p className="font-semibold">
+                        Total:{" "}
+                        <span className="font-normal">
+                          $ {(item.qty * item.price).toFixed(2)}
+                        </span>
+                      </p>
+                    </div>
+                    <div
+                      className="mt-3 sm:mt-0 border-2 border-rose-800 h-full p-2 rounded-lg bg-rose-500 text-white font-semibold flex items-center justify-center cursor-pointer hover:bg-rose-600"
+                      onClick={() => {
+                        setClickedProductName(item.name);
+                        setClickedProductId(item.product);
+                        setShowModal(true);
+                      }}
+                    >
+                      Post a review
+                    </div>
                   </div>
-                  <div className="flex-grow space-y-1 pl-4">
-                    <p className="font-semibold text-xl">
-                      <Link to={`/product/${item.product}`}>
-                        {item.name.substring(0, 25) + "..."}
-                      </Link>
-                    </p>
-                    <p className="font-semibold">
-                      Quantity: <span className="font-normal">{item.qty}</span>
-                    </p>
-                    <p className="font-semibold">
-                      Unit Price:{" "}
-                      <span className="font-normal">$ {item.price}</span>
-                    </p>
-                    <p className="font-semibold">
-                      Total:{" "}
-                      <span className="font-normal">
-                        $ {(item.qty * item.price).toFixed(2)}
-                      </span>
-                    </p>
-                  </div>
-                </div>
-                )
+                );
                 })}
             </div>
           )}

@@ -20,6 +20,8 @@ import HeartIcon from "./HeartIcon";
 import Ratings from "./Ratings";
 import ProductTabs from "./ProductTabs";
 import { addToCart } from "../../redux/features/cart/cartSlice.js";
+import { AiOutlineLeft } from "react-icons/ai";
+import { useAddAndUpdateProductToCartMutation, useGetUserCartQuery } from "../../redux/api/usersApiSlice.js";
 
 const ProductDetails = () => {
   const { id: productId } = useParams();
@@ -41,7 +43,8 @@ const ProductDetails = () => {
 
   const [createReview, { isLoading: loadingProductReview }] =
     useCreateReviewMutation();
-
+  const [addAndUpdateProductToCart] = useAddAndUpdateProductToCartMutation();
+  
   const submitHandler = async (e) => {
     e.preventDefault();
 
@@ -58,20 +61,28 @@ const ProductDetails = () => {
     }
   };
 
-  const addToCartHandler = () => {
-    dispatch(addToCart({ ...product, qty }));
-    navigate("/cart");
+  const addToCartHandler = async () => {
+    try {
+      await addAndUpdateProductToCart({
+        productId: product._id,
+        quantity: Number(qty),
+      }); 
+      toast.success("Added to cart");
+      navigate('/cart');
+    } catch (error) {
+      toast.error("Something went wrong.. Try again")
+    }
   };
 
   return (
     <>
-      <div>
-        <Link
-          to="/"
-          className="text-white font-semibold hover:underline ml-[10%] md:ml-[10rem]"
+      <div className="mt-3">
+        <div
+          className="text-black font-semibold hover:underline ml-[10%] md:ml-[10rem] flex gap-2 items-center cursor-pointer"
+          onClick={() => navigate(-1)}
         >
-          Go Back
-        </Link>
+          <AiOutlineLeft /> Go Back
+        </div>
       </div>
 
       {isLoading ? (
@@ -82,20 +93,20 @@ const ProductDetails = () => {
         </Message>
       ) : (
         <>
-          <div className="flex flex-col md:flex-row relative items-center mt-4 md:mt-8 mx-4 md:mx-10 gap-6 bg-red-100 p-6 rounded-2xl ">
-            <div className="md:mr-4 p-2">
+          <div className="flex flex-col lg:flex-row relative items-center mt-4 lg:mt-8 mx-4 lg:mx-10 gap-6 mb-10 bg-red-100 p-6 rounded-2xl ">
+            <div className="lg:mr-4 p-2">
               <img
                 src={product.image}
                 alt={product.name}
                 className="w-full md:max-w-[45rem] lg:max-w-[45rem] md:w-[30rem] sm:w-[20rem] mb-4 md:mb-0 mx-auto md:mx-0 rounded-[50%]"
-                style={{ contain: "content"}}
+                style={{ contain: "content" }}
               />
               <div className="absolute top-3 right-3 text-4xl">
                 <HeartIcon product={product} />
               </div>
             </div>
 
-            <div className="flex flex-col justify-between w-full md:w-1/2">
+            <div className="flex flex-col justify-between w-full lg:w-1/2">
               <h2 className="text-xl md:text-2xl lg:text-3xl font-semibold mb-2">
                 {product.name}
               </h2>
@@ -140,7 +151,7 @@ const ProductDetails = () => {
                       value={qty}
                       onChange={(e) => setQty(e.target.value)}
                       className="p-2 w-[6rem] rounded-lg text-black"
-                    >
+                    > 
                       {[...Array(product.countInStock).keys()].map((x) => (
                         <option key={x + 1} value={x + 1}>
                           {x + 1}
@@ -155,7 +166,7 @@ const ProductDetails = () => {
                 <button
                   onClick={addToCartHandler}
                   disabled={product.countInStock === 0}
-                  className="bg-pink-600 text-white py-2 px-4 rounded-lg w-full md:w-auto"  
+                  className="bg-pink-600 text-white py-2 px-4 rounded-lg w-full md:w-auto"
                 >
                   Add To Cart
                 </button>
@@ -163,7 +174,7 @@ const ProductDetails = () => {
             </div>
           </div>
 
-          <div className="mt-4 md:mt-[5rem] w-full md:w-2/3 mx-auto md:mx-0 mb-5">
+          <div className="!w-full">
             <ProductTabs
               loadingProductReview={loadingProductReview}
               userInfo={userInfo}

@@ -11,9 +11,10 @@ import {
     updateUserById,
     getUserFavorites,
     addProductToFavorites,
-    removeProductFromFavorites
-
-
+    removeProductFromFavorites,
+    getUserCart,
+    removeProductFromCart,
+    addAndUpdateProductToCart
 } from "../controllers/userController.js";
 import {
   authenticate,
@@ -22,8 +23,13 @@ import {
 
 const router = express.Router();
 
+// Cart routes
+router.route("/cart").post(authenticate, addAndUpdateProductToCart);
+router.route("/cart").get(authenticate, getUserCart);
+router.route("/cart").delete(authenticate, removeProductFromCart);
 
 
+// Favorites route
 router.route("/favorites").get(authenticate, getUserFavorites);
 router.route("/favorites").post(authenticate, addProductToFavorites );
 router.route("/favorites").delete(authenticate, removeProductFromFavorites);

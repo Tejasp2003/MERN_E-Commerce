@@ -2,6 +2,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { FaTrash } from "react-icons/fa";
 import { addToCart, removeFromCart } from "../redux/features/cart/cartSlice.js";
+import { useAddAndUpdateProductToCartMutation, useGetUserCartQuery, useRemoveProductFromCartMutation } from "../redux/api/usersApiSlice.js";
+import toast from "react-hot-toast";
 
 const backgroundColors = [
   "bg-red-200", "bg-violet-200", "bg-green-200", "bg-pink-200",
@@ -16,18 +18,34 @@ let globalColorIndex = 0;
 const Cart = () => {
 
   const tempBackgroundColor = backgroundColors[(globalColorIndex + 2) % backgroundColors.length];
+
+  const { data: cartItems, refetch } = useGetUserCartQuery();
+  const [addAndUpdateProductToCart] = useAddAndUpdateProductToCartMutation();
+  const [removeFromCart] = useRemoveProductFromCartMutation();
+
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
-  const cart = useSelector((state) => state.cart);
-  const { cartItems } = cart;
+  console.log(cartItems);
 
-  const addToCartHandler = (product, qty) => {
-    dispatch(addToCart({ ...product, qty }));
+  const addToCartHandler = async (productId, qty) => {
+    try {
+      await addAndUpdateProductToCart({ 
+        productId, 
+        quantity: qty, 
+      }).unwrap();
+      refetch();
+      toast.success("Added to cart");
+    } catch (error) {
+      toast.error("Error changing the quantity")
+    }
   };
 
-  const removeFromCartHandler = (id) => {
-    dispatch(removeFromCart(id));
+  const removeFromCartHandler = async (id) => {
+    await removeFromCart({
+      cartId: id,
+    }).unwrap();
+    refetch();
+    toast.success("Removed from cart");
   };
 
   const checkoutHandler = () => {
@@ -36,7 +54,7 @@ const Cart = () => {
 
   return (
     <div className="container mx-auto p-4">
-      {cartItems.length === 0 ? (
+      {cartItems && cartItems.length === 0 ? (
         <div className="text-center">
           Your cart is empty{" "}
           <Link to="/shop" className="text-blue-500">
@@ -48,7 +66,7 @@ const Cart = () => {
           <div className="flex-1">
             <h1 className="text-2xl font-semibold mb-4 text-center md:text-left">Shopping Cart</h1>
 
-            {cartItems.map((item, index) => {
+            {cartItems && cartItems.map((item, index) => {
               const currentBackgroundColor = backgroundColors[(globalColorIndex + index) % backgroundColors.length];
               const anotherBackgroundColor = backgroundColors[(globalColorIndex + index + 1) % backgroundColors.length];
               
@@ -57,18 +75,18 @@ const Cart = () => {
                 <div key={item._id} className={`flex flex-col md:flex-row items-center gap-4 p-2 rounded-xl shadow relative ${currentBackgroundColor} mb-4`}>
                   <div className="w-28 h-28 md:w-48 md:h-48 flex-shrink-0">
                     <img
-                      src={item.image}
-                      alt={item.name}
+                      src={item.product.image}
+                      alt={item.product.name}
                       className="w-full h-full object-cover rounded-[50%]"
                     />
                   </div>
                   <div className="flex-grow">
                     <Link to={`/product/${item._id}`} className="text-lg font-semibold text-black">
-                      {item.name}
+                      {item.product.name.substring(0, 35) + "..."}
                     </Link>
                     <div className="flex justify-between lg:justify-normal  flex-wrap gap-2 items-center mt-2">
-                      <span className={`text-sm font-bold ${anotherBackgroundColor} p-2 rounded-3xl border border-black`}>{item.brand}</span>
-                      <span className="text-lg font-bold">$ {item.price}</span>
+                      <span className={`text-sm font-bold ${anotherBackgroundColor} p-2 rounded-3xl border border-black`}>{item.product.brand}</span>
+                      <span className="text-lg font-bold">$ {item.product.price}</span>
                     </div>
                   </div>
                   <div className="
@@ -88,10 +106,10 @@ const Cart = () => {
                         border-2 border-black
                         p-2 rounded-full
                       "
-                      value={item.qty}
-                      onChange={(e) => addToCartHandler(item, Number(e.target.value))}
+                      value={item.quantity}
+                      onChange={(e) => addToCartHandler(item?.product?._id, Number(e.target.value))}
                     >
-                      {[...Array(item.countInStock).keys()].map((x) => (
+                      {[...Array(item.product.countInStock).keys()].map((x) => (
                         <option key={x + 1} value={x + 1}>
                           {x + 1}
                         </option>
@@ -100,7 +118,7 @@ const Cart = () => {
                   </div>
                   <button
                     className="text-red-500 absolute top-2 right-2"
-                    onClick={() => removeFromCartHandler(item._id)}
+                    onClick={() => removeFromCartHandler(item?._id)}
                   >
                     <FaTrash size="1.5em" />
                   </button>
@@ -111,12 +129,12 @@ const Cart = () => {
           <div className={`w-full h-full  md:w-1/3 lg:w-1/4 shadow p-4 rounded-xl bg-slate-200 md:mt-12`}>
             <h2 className="text-xl font-semibold mb-2">Order Summary</h2>
             <p className="text-lg">
-              Items ({cartItems.reduce((acc, item) => acc + item.qty, 0)})
+              Items ({cartItems && cartItems.reduce((acc, item) => acc + item.quantity, 0)})
             </p>
             <p className="text-2xl font-bold mb-4">
               Total: $
-              {cartItems
-                .reduce((acc, item) => acc + item.qty * item.price, 0)
+              {cartItems && cartItems
+                .reduce((acc, item) => acc + item.quantity * item.product.price, 0)
                 .toFixed(2)}
             </p>
             <button
@@ -129,7 +147,7 @@ const Cart = () => {
                 rounded-xl
                 mb-4
               "
-              disabled={cartItems.length === 0}
+              disabled={cartItems && cartItems.length === 0}
               onClick={checkoutHandler}
             >
               Proceed to Checkout

@@ -115,7 +115,7 @@ const addProductReview = asyncHandler(async (req, res) => {
       return res.status(404).send("Product not found");
     }
     const alreadyReviewed = product.reviews.find(
-      (r) => r.user.toString() === req.user._id.toString()
+      (review) => review.user.toString() === req.user._id.toString()
     );
     if (alreadyReviewed) {
       return res.status(400).send("Product already reviewed");

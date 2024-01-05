@@ -32,7 +32,7 @@ const UserOrder = () => {
   return (
     <div className="mx-5 my-3">
       <h2 className="text-2xl font-semibold mt-4 mb-4 text-center">
-        My Orders ({orders?.length})
+        My Orders
       </h2>
 
       {isLoading ? (
@@ -50,7 +50,8 @@ const UserOrder = () => {
               return (
                 <div
                   key={order._id}
-                  className={`flex flex-col ${currentBackgroundColor} p-5 rounded-lg gap-3 cursor-pointer`} onClick={() => {
+                  className={`flex flex-col ${currentBackgroundColor} p-5 rounded-lg gap-3 cursor-pointer`}
+                  onClick={() => {
                     window.location.href = `/order/${order._id}`;
                   }}
                 >
@@ -92,15 +93,17 @@ const UserOrder = () => {
                         )}
                       </div>
                       <div>
-                        {order?.isDelivered ? (
-                          <span className="p-2 bg-green-300 rounded-full border border-black">
-                            Delivered
-                          </span>
-                        ) : (
-                          <span className="p-2 bg-red-300 rounded-full border border-black">
-                            In Process
-                          </span>
-                        )}
+                        {order?.isPaid ? (
+                          order?.isDelivered ? (
+                            <span className="p-2 bg-green-300 rounded-full border border-black">
+                              Delivered
+                            </span>
+                          ) : (
+                            <span className="p-2 bg-red-300 rounded-full border border-black">
+                              Delivery in-process
+                            </span>
+                          )
+                        ) : null}
                       </div>
                     </div>
                   </div>

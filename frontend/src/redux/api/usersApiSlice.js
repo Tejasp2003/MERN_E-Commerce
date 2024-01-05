@@ -89,6 +89,29 @@ export const userApiSlice = apiSlice.injectEndpoints({
       }),
       
     }),
+
+    addAndUpdateProductToCart: builder.mutation({
+      query: (data) => ({
+        url: `${USERS_URL}/cart`,
+        method: "POST",
+        body: data,
+      }),
+    }),
+
+    getUserCart: builder.query({
+      query: () => ({
+        url: `${USERS_URL}/cart`,
+        method: "GET",
+      }),
+    }),
+
+    removeProductFromCart: builder.mutation({
+      query: (data) => ({
+        url: `${USERS_URL}/cart`,
+        method: "DELETE",
+        body: data,
+      }),
+    }),
   }),
 });
 
@@ -104,5 +127,7 @@ export const {
   useAddFavoriteProductMutation,
   useRemoveFavoriteProductMutation,
   useGetUserFavoriteProductsQuery,
-  
+  useAddAndUpdateProductToCartMutation,
+  useGetUserCartQuery,
+  useRemoveProductFromCartMutation,
 } = userApiSlice;
