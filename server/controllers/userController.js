@@ -255,7 +255,7 @@ const addAndUpdateProductToCart = asyncHandler(async (req, res) => {
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
-    
+
     const existingProductIndex = user.cart.findIndex(
       (item) => item.product.toString() === productId.toString()
     );
@@ -296,13 +296,11 @@ const getUserCart = asyncHandler(async (req, res) => {
 
 const removeProductFromCart = asyncHandler(async (req, res) => {
   try {
-    const userId = req.user._id; 
-    const { cartId } = req.body; 
+    const userId = req.user._id;
+    const { cartId } = req.body;
 
     if (!cartId) {
-      return res
-        .status(400)
-        .json({ error: "Cart ID to remove is required" });
+      return res.status(400).json({ error: "Cart ID to remove is required" });
     }
 
     const user = await User.findById(userId);
@@ -311,13 +309,13 @@ const removeProductFromCart = asyncHandler(async (req, res) => {
       return res.status(404).json({ error: "User not found" });
     }
 
-    if(user.cart || user.cart.length > 0){
+    if (user.cart || user.cart.length > 0) {
       user.cart = user.cart.filter(
         (item) => item?._id?.toString() !== cartId?.toString()
       );
 
       await user.save();
-    } 
+    }
 
     res
       .status(200)
@@ -327,6 +325,26 @@ const removeProductFromCart = asyncHandler(async (req, res) => {
   }
 });
 
+const clearCart = asyncHandler(async (req, res) => {
+  try {
+    const userId = req.user._id;
+
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    user.cart = [];
+
+    await user.save();
+
+    res.status(200).json({ message: "Cart cleared successfully", user });
+  } catch (error) {
+    console.log(error.message);
+    res.status(400).json({ message: error.message });
+  }
+});
 
 export {
   createUser,
@@ -344,4 +362,5 @@ export {
   addAndUpdateProductToCart,
   getUserCart,
   removeProductFromCart,
+  clearCart,
 };

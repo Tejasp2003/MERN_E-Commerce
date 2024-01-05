@@ -112,6 +112,13 @@ export const userApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
+
+    clearCart: builder.mutation({
+      query: () => ({
+        url: `${USERS_URL}/clearcart`,
+        method: "DELETE",
+      }),
+    }),
   }),
 });
 
@@ -130,4 +137,5 @@ export const {
   useAddAndUpdateProductToCartMutation,
   useGetUserCartQuery,
   useRemoveProductFromCartMutation,
+  useClearCartMutation,
 } = userApiSlice;

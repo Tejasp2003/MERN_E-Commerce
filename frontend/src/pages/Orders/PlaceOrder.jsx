@@ -1,37 +1,64 @@
 import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import Message from "../../components/Message";
 import ProgressSteps from "../../components/ProgressSteps";
 import Loader from "../../components/Loader";
 import { useCreateOrderMutation } from "../../redux/api/orderApiSlice";
-import { clearCartItems } from "../../redux/features/cart/cartSlice";
+
+import { useGetUserCartQuery } from "../../redux/api/usersApiSlice";
 
 const PlaceOrder = () => {
   const navigate = useNavigate();
-  const cart = useSelector((state) => state.cart);
+  const checkoutInfo = useSelector((state) => state.shippingAddress);
+  const { data: cartItems } = useGetUserCartQuery();
+
+  console.log(cartItems);
+
   const [createOrder, { isLoading, error }] = useCreateOrderMutation();
-  const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!cart.shippingAddress.address) {
+    if (!checkoutInfo?.shippingAddress?.address) {
       navigate("/shipping");
     }
-  }, [cart.paymentMethod, cart.shippingAddress.address, navigate]);
+  }, [navigate, checkoutInfo]);
+
+  const shippingPrice = 0;
+  const taxPrice =
+    0.15 *
+    cartItems?.reduce(
+      (acc, item) => acc + item.product?.price * item.quantity,
+      0
+    );
+  const totalPrice = (
+    Number(
+      cartItems?.reduce(
+        (acc, item) => acc + item?.product?.price * item?.quantity,
+        0
+      )
+    ) +
+    Number(shippingPrice) +
+    Number(taxPrice)
+  ).toFixed(2);
+
+  const itemsPrice = cartItems?.reduce(
+    (acc, item) => acc + item?.product?.price * item?.quantity,
+    0
+  );
 
   const placeOrderHandler = async () => {
     try {
       const res = await createOrder({
-        orderItems: cart.cartItems,
-        shippingAddress: cart.shippingAddress,
-        paymentMethod: cart.paymentMethod,
-        itemsPrice: cart.itemsPrice,
-        shippingPrice: cart.shippingPrice,
-        taxPrice: cart.taxPrice,
-        totalPrice: cart.totalPrice,
+        orderItems: cartItems,
+        shippingAddress: checkoutInfo?.shippingAddress,
+        paymentMethod: checkoutInfo?.paymentMethod,
+        itemsPrice,
+        taxPrice: 0.15,
+        shippingPrice,
+        totalPrice,
       }).unwrap();
-      dispatch(clearCartItems());
+
       navigate(`/order/${res._id}`);
     } catch (error) {
       toast.error(error);
@@ -41,37 +68,48 @@ const PlaceOrder = () => {
   return (
     <>
       <div className="container mx-auto mt-8">
-      <ProgressSteps step1 step2 step3 /> 
-        {cart.cartItems.length === 0 ? (
+        <ProgressSteps step1 step2 step3 />
+        {cartItems?.length === 0 ? (
           <Message>Your cart is empty</Message>
         ) : (
           <div className="flex flex-col w-full p-4">
-            {cart.cartItems.map((item, index) => (
-              <div key={index} className="mb-4 border-b border-gray-300 pb-4">
-                <div className="flex">
-                  <img
-                    src={item.image}
-                    alt={item.name}
-                    className="w-16 h-16 object-cover mr-4"
-                  />
-                  <div className="flex-grow">
-                    <Link
-                      to={`/product/${item.product}`}
-                      className="text-lg font-semibold"
-                    >
-                      {item.name.substring(0, 40) + "..."}
-                    </Link>
-                    <div className="text-gray-600">Quantity: {item.qty}</div>
-                    <div className="text-gray-600">
-                      Price: ${item.price.toFixed(2)}
-                    </div>
-                    <div className="text-gray-600">
-                      Total: ${(item.qty * item.price).toFixed(2)}
+            {cartItems?.map(
+              (item, index) => (
+                console.log(item),
+                (
+                  <div
+                    key={index}
+                    className="mb-4 border-b border-gray-300 pb-4"
+                  >
+                    <div className="flex">
+                      <img
+                        src={item?.product?.image}
+                        alt={item?.product?.name}
+                        className="w-16 h-16 object-cover mr-4"
+                      />
+                      <div className="flex-grow">
+                        <Link
+                          to={`/product/${item?.product?._id}`}
+                          className="text-lg font-semibold"
+                        >
+                          {item?.product?.name?.substring(0, 40) + "..."}
+                        </Link>
+                        <div className="text-gray-600">
+                          Quantity: {item?.quantity}
+                        </div>
+                        <div className="text-gray-600">
+                          Price: ${item?.product?.price?.toFixed(2)}
+                        </div>
+                        <div className="text-gray-600">
+                          Total: $
+                          {(item?.quantity * item?.product?.price).toFixed(2)}
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div>
-            ))}
+                )
+              )
+            )}
           </div>
         )}
 
@@ -80,17 +118,17 @@ const PlaceOrder = () => {
           <div className="flex flex-col bg-rose-100 p-4 rounded-lg mb-4">
             <ul className="text-lg mb-4">
               <li>
-                <span className="font-semibold">Items:</span> ${cart.itemsPrice}
+                <span className="font-semibold">Items:</span> ${itemsPrice}
               </li>
               <li>
                 <span className="font-semibold">Shipping:</span> $
-                {cart.shippingPrice}
+                {shippingPrice}
               </li>
               <li>
-                <span className="font-semibold">Tax:</span> ${cart.taxPrice}
+                <span className="font-semibold">Tax:</span> ${taxPrice}
               </li>
               <li>
-                <span className="font-semibold">Total:</span> ${cart.totalPrice}
+                <span className="font-semibold">Total:</span> ${totalPrice}
               </li>
             </ul>
 
@@ -99,22 +137,25 @@ const PlaceOrder = () => {
             <div className="mb-4">
               <h2 className="text-xl font-semibold mb-2">Shipping</h2>
               <p>
-                <strong>Address:</strong> {cart.shippingAddress.address},{" "}
-                {cart.shippingAddress.city} {cart.shippingAddress.postalCode},{" "}
-                {cart.shippingAddress.country}
+                <strong>Address:</strong>{" "}
+                {checkoutInfo?.shippingAddress?.address},{" "}
+                {checkoutInfo?.shippingAddress?.city}{" "}
+                {checkoutInfo?.shippingAddress?.postalCode},{" "}
+                {checkoutInfo?.shippingAddress?.country}
               </p>
             </div>
 
             <div>
               <h2 className="text-xl font-semibold mb-2">Payment Method</h2>
-              <span className="font-">Method:</span> {cart.paymentMethod}
+              <span className="font-">Method:</span>{" "}
+              {checkoutInfo?.paymentMethod}
             </div>
           </div>
 
           <button
             type="button"
             className={`bg-rose-500 text-white py-2 px-4 rounded-full text-lg w-full mb-4 hover:bg-rose-600`}
-            disabled={cart.cartItems === 0}
+            disabled={cartItems === 0}
             onClick={placeOrderHandler}
           >
             Place Order

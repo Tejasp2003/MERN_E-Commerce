@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
+import { clearCheckoutInfo } from "../../redux/features/cart/cartSlice";
 
 import Loader from "../../components/Loader";
 import {
@@ -14,14 +15,16 @@ import {
 import Message from "../../components/Message";
 import { FaPaypal } from "react-icons/fa";
 import ReviewModal from "../../components/ReviewModal";
-import { FaStar } from "react-icons/fa6";
+import { useClearCartMutation } from "../../redux/api/usersApiSlice";
 
 const Order = () => {
   const { id: orderId } = useParams();
   const [showModal, setShowModal] = useState(false);
   const [clickedProductName, setClickedProductName] = useState(null);
   const [clickedProductId, setClickedProductId] = useState(null);
+  const [clearCart] = useClearCartMutation();
 
+  const dispatch = useDispatch();
   const {
     data: order,
     refetch,
@@ -47,7 +50,11 @@ const Order = () => {
       try {
         await payOrder({ orderId, details });
         refetch();
-        toast.success("Order is paid");
+        toast.success("Order is paid");8
+        await clearCart(userInfo._id);
+      // reload
+        window.location.reload();
+        dispatch(clearCheckoutInfo());
       } catch (error) {
         toast.error(error?.data?.message || error.message);
       }
@@ -116,7 +123,6 @@ const Order = () => {
   ];
 
   let globalColorIndex = 0;
-  const currentBackgroundColor = backgroundColors[globalColorIndex];
 
   globalColorIndex = (globalColorIndex + 1) % backgroundColors.length;
 
@@ -180,6 +186,8 @@ const Order = () => {
                         </span>
                       </p>
                     </div>
+                    {
+                      order?.isPaid && order?.isDelivered && !order?.user?.username === userInfo?.username &&
                     <div
                       className="mt-3 sm:mt-0 border-2 border-rose-800 h-full p-2 rounded-lg bg-rose-500 text-white font-semibold flex items-center justify-center cursor-pointer hover:bg-rose-600"
                       onClick={() => {
@@ -190,9 +198,10 @@ const Order = () => {
                     >
                       Post a review
                     </div>
+                    }
                   </div>
                 );
-                })}
+              })}
             </div>
           )}
         </div>

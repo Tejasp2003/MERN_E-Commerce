@@ -28,7 +28,7 @@ const ProductHeaderCard = ({ image, name, price, id }) => {
   return (
     <Link to={`/product/${id}`}>
       <div
-        className={`flex flex-col justify-center items-center  w-full md:w-[262px] sm:w-[240px] h-auto sm:h-[350px] rounded-lg m-6 p-4 ${currentBackgroundColor}`}
+        className={`flex flex-col justify-center items-center  w-full md:w-[262px] sm:w-[240px] h-auto sm:h-[350px] rounded-lg p-2 ${currentBackgroundColor}`}
       >
         <img
           src={image}

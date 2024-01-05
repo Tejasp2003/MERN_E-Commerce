@@ -11,7 +11,7 @@ const store = configureStore({
     [apiSlice.reducerPath]: apiSlice.reducer,
     auth: authReducer,
 
-    cart: cartSliceReducer,
+    shippingAddress: cartSliceReducer,
     shop: shopReducer,
   },
 

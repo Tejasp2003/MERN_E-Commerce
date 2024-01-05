@@ -13,10 +13,11 @@ const Home = () => {
 
   return (
     <>
-      <CategoryCarousel />
-      <ProductCarousel />
+      <div className="flex flex-col justify-center items-center">
+        <CategoryCarousel />
+        <ProductCarousel />
 
-      {/* <div className="flex justify-between items-center">
+        {/* <div className="flex justify-between items-center">
             <h1 className="ml-[20rem] mt-[10rem] text-[3rem]">
               Special Products
             </h1>
@@ -39,6 +40,7 @@ const Home = () => {
               ))}
             </div>
           </div> */}
+      </div>
     </>
   );
 };

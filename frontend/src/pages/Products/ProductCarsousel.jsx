@@ -62,7 +62,7 @@ const ProductCarousel = () => {
 
   console.log("Current Index", currentIndex);
   return (
-    <div className="rounded-lg relative pr-2 pl-2 mt-6">
+    <div className="rounded-lg relative pr-4 pl-4 mt-6">
       {isLoading ? (
         // Loading state
         <p>Loading...</p>
@@ -72,7 +72,7 @@ const ProductCarousel = () => {
         </Message>
       ) : (
         <>
-          <div >
+          <div>
             <h1
               className="
               text-2xl
@@ -81,6 +81,7 @@ const ProductCarousel = () => {
               font-bold
               text-center
               m-2
+
             "
             >
               Our Top Products
@@ -89,18 +90,18 @@ const ProductCarousel = () => {
 
           <button
             onClick={handlePrev}
-            className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-gray-600 text-white p-2 rounded-full"
+            className="absolute left-[-1px] top-1/2 transform -translate-y-1/2 bg-gray-600 text-white p-2 rounded-full ml-2"
           >
             <FaCircleChevronLeft />
           </button>
           <button
             onClick={handleNext}
-            className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-gray-600 text-white p-2 rounded-full"
+            className="absolute right-[-1px] top-1/2 transform -translate-y-1/2 bg-gray-600 text-white p-2 rounded-full mr-2"
           >
             <FaCircleChevronRight />
           </button>
 
-          <div className="flex flex-row justify-center items-center overflow-hidden transition-transform duration-500">
+          <div className="flex flex-row justify-center items-center overflow-hidden transition-transform duration-500 gap-[20px]">
             {getVisibleProducts().map((product) => (
               <ProductHeaderCard
                 key={product._id}

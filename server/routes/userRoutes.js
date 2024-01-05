@@ -7,14 +7,15 @@ import {
   loginUser,
   logoutCurrentUser,
   updateCurrentUser,
-    getUserById,
-    updateUserById,
-    getUserFavorites,
-    addProductToFavorites,
-    removeProductFromFavorites,
-    getUserCart,
-    removeProductFromCart,
-    addAndUpdateProductToCart
+  getUserById,
+  updateUserById,
+  getUserFavorites,
+  addProductToFavorites,
+  removeProductFromFavorites,
+  getUserCart,
+  removeProductFromCart,
+  addAndUpdateProductToCart,
+  clearCart,
 } from "../controllers/userController.js";
 import {
   authenticate,
@@ -28,10 +29,11 @@ router.route("/cart").post(authenticate, addAndUpdateProductToCart);
 router.route("/cart").get(authenticate, getUserCart);
 router.route("/cart").delete(authenticate, removeProductFromCart);
 
+router.route("/clearcart").delete(authenticate, clearCart);
 
 // Favorites route
 router.route("/favorites").get(authenticate, getUserFavorites);
-router.route("/favorites").post(authenticate, addProductToFavorites );
+router.route("/favorites").post(authenticate, addProductToFavorites);
 router.route("/favorites").delete(authenticate, removeProductFromFavorites);
 
 router
@@ -46,8 +48,10 @@ router
   .get(authenticate, getCurrentUser)
   .put(authenticate, updateCurrentUser);
 
-router.route("/:id").delete(authenticate, authorizeAsAdmin, deleteUserById)
-.get(authenticate, authorizeAsAdmin, getUserById)
-.put(authenticate, authorizeAsAdmin, updateUserById)
+router
+  .route("/:id")
+  .delete(authenticate, authorizeAsAdmin, deleteUserById)
+  .get(authenticate, authorizeAsAdmin, getUserById)
+  .put(authenticate, authorizeAsAdmin, updateUserById);
 
 export default router;

@@ -8,16 +8,16 @@ import {
 import ProgressSteps from "../../components/ProgressSteps";
 
 const Shipping = () => {
-  const cart = useSelector((state) => state.cart);
-  const { shippingAddress } = cart;
+  const shippingAddress = useSelector((state) => state.shippingAddress);
+  console.log(shippingAddress);
 
   const [paymentMethod, setPaymentMethod] = useState("PayPal");
-  const [address, setAddress] = useState(shippingAddress.address || "");
-  const [city, setCity] = useState(shippingAddress.city || "");
+  const [address, setAddress] = useState(shippingAddress?.address || "");
+  const [city, setCity] = useState(shippingAddress?.city || "");
   const [postalCode, setPostalCode] = useState(
-    shippingAddress.postalCode || ""
+    shippingAddress?.postalCode || ""
   );
-  const [country, setCountry] = useState(shippingAddress.country || "");
+  const [country, setCountry] = useState(shippingAddress?.country || "");
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -32,7 +32,7 @@ const Shipping = () => {
 
   // Payment
   useEffect(() => {
-    if (!shippingAddress.address) {
+    if (!shippingAddress?.address) {
       navigate("/shipping");
     }
   }, [navigate, shippingAddress]);
