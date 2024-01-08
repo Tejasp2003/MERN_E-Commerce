@@ -177,28 +177,29 @@ const Order = () => {
                       </p>
                       <p className="font-semibold">
                         Unit Price:{" "}
-                        <span className="font-normal">$ {item.price}</span>
+                        <span className="font-normal">₹ {item.price}</span>
                       </p>
                       <p className="font-semibold">
                         Total:{" "}
                         <span className="font-normal">
-                          $ {(item.qty * item.price).toFixed(2)}
+                          ₹ {(item.qty * item.price).toFixed(2)}
                         </span>
                       </p>
                     </div>
-                    {
-                      order?.isPaid && order?.isDelivered && !order?.user?.username === userInfo?.username &&
-                    <div
-                      className="mt-3 sm:mt-0 border-2 border-rose-800 h-full p-2 rounded-lg bg-rose-500 text-white font-semibold flex items-center justify-center cursor-pointer hover:bg-rose-600"
-                      onClick={() => {
-                        setClickedProductName(item.name);
-                        setClickedProductId(item.product);
-                        setShowModal(true);
-                      }}
-                    >
-                      Post a review
-                    </div>
-                    }
+                    {order?.isPaid &&
+                      order?.isDelivered &&
+                      !order?.user?.username === userInfo?.username && (
+                        <div
+                          className="mt-3 sm:mt-0 border-2 border-rose-800 h-full p-2 rounded-lg bg-rose-500 text-white font-semibold flex items-center justify-center cursor-pointer hover:bg-rose-600"
+                          onClick={() => {
+                            setClickedProductName(item.name);
+                            setClickedProductId(item.product);
+                            setShowModal(true);
+                          }}
+                        >
+                          Post a review
+                        </div>
+                      )}
                   </div>
                 );
               })}
@@ -241,19 +242,19 @@ const Order = () => {
         <div className="flex flex-col mb-2">
           <div className="flex justify-between">
             <span className="font-bold text-pink-500">Items</span>
-            <span>$ {order.itemsPrice}</span>
+            <span>₹ {order.itemsPrice}</span>
           </div>
           <div className="flex justify-between">
             <span className="font-bold text-pink-500">Shipping</span>
-            <span>$ {order.shippingPrice}</span>
+            <span>₹ {order.shippingPrice}</span>
           </div>
           <div className="flex justify-between">
             <span className="font-bold text-pink-500">Tax</span>
-            <span>$ {order.taxPrice}</span>
+            <span>₹ {order.taxPrice}</span>
           </div>
           <div className="flex justify-between border-t border-gray-400">
             <span className="font-bold text-pink-500">Total</span>
-            <span className="font-semibold">$ {order.totalPrice}</span>
+            <span className="font-semibold">₹ {order.totalPrice}</span>
           </div>
         </div>
 

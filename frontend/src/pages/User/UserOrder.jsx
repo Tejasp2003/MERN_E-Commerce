@@ -65,7 +65,7 @@ const UserOrder = () => {
                       <p className="text-lg font-semibold">
                         {item?.name.substring(0, 25) + "..."}
                       </p>
-                      <p className="font-semibold">${item?.price}</p>
+                      <p className="font-semibold">₹{item?.price}</p>
                     </div>
                   </div>
                   <div className="flex flex-col sm:flex-row justify-between items-center gap-3">
@@ -78,7 +78,7 @@ const UserOrder = () => {
                     </p>
                     <p>
                       Total:{" "}
-                      <span className="font-bold">${order?.totalPrice}</span>
+                      <span className="font-bold">₹{order?.totalPrice}</span>
                     </p>
                     <div className="flex flex-row justify-between space-x-3">
                       <div>

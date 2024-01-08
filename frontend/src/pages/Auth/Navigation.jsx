@@ -26,8 +26,9 @@ const Navigation = () => {
   const { userInfo } = useSelector((state) => state.auth);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [showSidebar, setShowSidebar] = useState(false);
+  const [cartItemsCount, setCartItemsCount] = useState(0);
 
-  const { data: cartItems, refetch } = useGetUserCartQuery();
+  const { data: cartItems } = useGetUserCartQuery();
 
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
@@ -49,7 +50,6 @@ const Navigation = () => {
     }
   };
 
-  const [cartItemsCount, setCartItemsCount] = useState(0);
 
   useEffect(() => {
     if (cartItems) {

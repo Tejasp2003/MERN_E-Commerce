@@ -33,9 +33,8 @@ const OrderList = () => {
           </thead>
 
           <tbody>
-          {
-            orders?.map((order)=>(
-              order?.orderItems?.map((item)=>(
+            {orders?.map((order) =>
+              order?.orderItems?.map((item) => (
                 <tr key={item._id}>
                   <td className="py-2">
                     <img
@@ -47,7 +46,7 @@ const OrderList = () => {
                   <td className="py-2">{order._id}</td>
                   <td className="py-2">{order.user.username}</td>
                   <td className="py-2">{order.createdAt.substring(0, 10)}</td>
-                  <td className="py-2">$ {order.totalPrice}</td>
+                  <td className="py-2">₹ {order.totalPrice}</td>
                   <td className="py-2">
                     {order.isPaid ? (
                       <p className="p-1 text-center bg-green-400 w-[6rem] rounded-full">
@@ -79,8 +78,7 @@ const OrderList = () => {
                   </td>
                 </tr>
               ))
-            ))
-          }
+            )}
           </tbody>
         </table>
       )}

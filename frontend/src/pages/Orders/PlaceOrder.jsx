@@ -98,10 +98,10 @@ const PlaceOrder = () => {
                           Quantity: {item?.quantity}
                         </div>
                         <div className="text-gray-600">
-                          Price: ${item?.product?.price?.toFixed(2)}
+                          Price: ₹{item?.product?.price?.toFixed(2)}
                         </div>
                         <div className="text-gray-600">
-                          Total: $
+                          Total: ₹
                           {(item?.quantity * item?.product?.price).toFixed(2)}
                         </div>
                       </div>
@@ -118,17 +118,17 @@ const PlaceOrder = () => {
           <div className="flex flex-col bg-rose-100 p-4 rounded-lg mb-4">
             <ul className="text-lg mb-4">
               <li>
-                <span className="font-semibold">Items:</span> ${itemsPrice}
+                <span className="font-semibold">Items:</span> ₹{itemsPrice}
               </li>
               <li>
-                <span className="font-semibold">Shipping:</span> $
+                <span className="font-semibold">Shipping:</span> ₹
                 {shippingPrice}
               </li>
               <li>
-                <span className="font-semibold">Tax:</span> ${taxPrice}
+                <span className="font-semibold">Tax:</span> ₹{taxPrice}
               </li>
               <li>
-                <span className="font-semibold">Total:</span> ${totalPrice}
+                <span className="font-semibold">Total:</span> ₹{totalPrice}
               </li>
             </ul>
 

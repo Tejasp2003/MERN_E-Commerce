@@ -31,7 +31,7 @@ const CategoryCard = ({ name, image}) => {
   globalColorIndex = (globalColorIndex + 1) % backgroundColors.length;
 
   return (
-    <div className="flex flex-col justify-center items-center hover:scale-110 transition duration-300 ease-in-out cursor-pointer overflow-hidden"
+    <div className="flex flex-col justify-center items-center hover:scale-110 transition duration-300 ease-in-out cursor-pointer overflow-hidden min-w-fit"
           onClick={() => {
             window.location.href = `/products?category=${name}`;
           }

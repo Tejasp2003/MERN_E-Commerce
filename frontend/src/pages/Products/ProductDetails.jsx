@@ -108,7 +108,7 @@ const ProductDetails = () => {
               </p>
 
               <p className="text-2xl md:text-3xl lg:text-4xl my-2 font-extrabold">
-                $ {product.price}
+                ₹ {product.price}
               </p>
 
               <div className="flex flex-row items-center justify-between">

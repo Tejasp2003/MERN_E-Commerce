@@ -8,6 +8,7 @@ import {
   useRemoveProductFromCartMutation,
 } from "../redux/api/usersApiSlice.js";
 import toast from "react-hot-toast";
+import EmptyCart from "../components/EmptyCart.jsx";
 
 const backgroundColors = [
   "bg-red-200",
@@ -69,11 +70,8 @@ const Cart = () => {
   return (
     <div className="container mx-auto p-4">
       {cartItems && cartItems.length === 0 ? (
-        <div className="text-center">
-          Your cart is empty{" "}
-          <Link to="/shop" className="text-blue-500">
-            Go To Shop
-          </Link>
+        <div>
+          <EmptyCart />
         </div>
       ) : (
         <div className="flex flex-col md:flex-row justify-between gap-4 items-start">
@@ -119,7 +117,7 @@ const Cart = () => {
                           {item.product.brand}
                         </span>
                         <span className="text-lg font-bold">
-                          $ {item.product.price}
+                          ₹ {item.product.price}
                         </span>
                       </div>
                     </div>
@@ -180,7 +178,7 @@ const Cart = () => {
               )
             </p>
             <p className="text-2xl font-bold mb-4">
-              Total: $
+              Total: ₹
               {cartItems &&
                 cartItems
                   .reduce(

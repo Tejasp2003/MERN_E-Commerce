@@ -63,8 +63,7 @@ const ProductCard = ({ product }) => {
         <img
           src={product?.image}
           alt={product?.name}
-          className={`!w-[200px] !h-[200px] rounded-full object-cover mt-[-40px] border-2`}
-          style={{ contain: "content" }}
+          className={`!w-[200px] !h-[200px] rounded-full object-contain mt-[-40px] border-2 bg-white`}
         />
 
         <h1 className="text-[18px] font-bold flex flex-wrap mt-2 text-center">
@@ -78,7 +77,7 @@ const ProductCard = ({ product }) => {
           >
             {product.brand}
           </p>
-          <p className="text-lg text-black font-bold">${product.price}</p>
+          <p className="text-lg text-black font-bold">₹{product.price}</p>
         </div>
       </div>
       <div className="absolute top-2 right-2 cursor-pointer">

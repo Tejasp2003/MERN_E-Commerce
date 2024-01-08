@@ -10,6 +10,7 @@ const ProductCarousel = () => {
     if (width < 640) return 1; // xs: For very small screens, show 1 item
     if (width < 768) return 2; // sm: For small screens, show 2 items
     if (width < 1024) return 3; // md: For medium screens, show 3 items
+    if (width < 1280) return 4; // md: For medium screens, show 3 items
     return 5; // lg: For large screens and up, show 4 items
   };
 
@@ -80,9 +81,7 @@ const ProductCarousel = () => {
               md:text-4xl
               font-bold
               text-center
-              m-2
-
-            "
+              m-2"
             >
               Our Top Products
             </h1>
@@ -90,13 +89,13 @@ const ProductCarousel = () => {
 
           <button
             onClick={handlePrev}
-            className="absolute left-[-1px] top-1/2 transform -translate-y-1/2 bg-gray-600 text-white p-2 rounded-full ml-2"
+            className="absolute left-0 top-1/2 bg-gray-600 text-white p-2 rounded-full"
           >
             <FaCircleChevronLeft />
           </button>
           <button
             onClick={handleNext}
-            className="absolute right-[-1px] top-1/2 transform -translate-y-1/2 bg-gray-600 text-white p-2 rounded-full mr-2"
+            className="absolute right-0 top-1/2 bg-gray-600 text-white p-2 rounded-full "
           >
             <FaCircleChevronRight />
           </button>

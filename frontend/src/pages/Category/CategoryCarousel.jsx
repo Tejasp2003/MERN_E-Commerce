@@ -7,7 +7,7 @@ const CategoryCarousel = () => {
   return (
     <>
       
-      <div className="flex justify-center items-center flex-row space-x-8 mt-4 p-4 overflow-hidden">
+      <div className="w-screen flex flex-row space-x-8 mt-4 ml-32 mr-32 p-4 overflow-x-scroll scrollbar-hide">
         {categories &&
           categories.map((category) => (
             <CategoryCard

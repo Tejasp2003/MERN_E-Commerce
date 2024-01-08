@@ -3,6 +3,7 @@ import { useGetProductsQuery } from "../../redux/api/productApiSlice";
 import { useSearchParams } from "react-router-dom";
 import ProductCard from "./ProductCard";
 import Filter from "../../components/Filter";
+import FilterModal from "../../components/FilterModal";
 
 const ProductsPage = () => {
   const [searchParams] = useSearchParams();
@@ -11,6 +12,8 @@ const ProductsPage = () => {
   const { data: Products } = useGetProductsQuery({ category });
   const [products, setProducts] = useState([]);
   const [showProduct, setshowProduct] = useState(true);
+  const [filterApplied, setFilterApplied] = useState(false);
+  const [filterModalOpen, setFilterModalOpen] = useState(false);
 
   useEffect(() => {
     if (Products) {
@@ -18,27 +21,63 @@ const ProductsPage = () => {
     }
   }, [Products]);
 
+
   console.log(showProduct);
 
   const displayProducts = products.length > 0 ? products : Products;
 
   return (
-    <div className="flex flex-row">
+    <div className="flex flex-col md:flex-row">
+      <div
+        className={`${
+          filterApplied ? "justify-around w-full" : "justify-end w-[90vw]"
+        } md:hidden flex flex-row h-full rounded-xl cursor-pointer`}
+      >
+        <div
+          className={`${
+            filterApplied ? "" : "hidden"
+          } border-2 border-rose-700 text-rose-700 font-semibold tracking-wider px-3 py-1 rounded-xl cursor-pointer bg-rose-200`} onClick={() => {
+            setFilterApplied(false);
+            setProducts(Products);
+          }}
+        >
+          Clear Filter
+        </div>
+        <div
+          className="border-2 border-rose-700 text-rose-700 font-semibold tracking-wider px-3 py-1 rounded-xl cursor-pointer bg-rose-200"
+          onClick={() => setFilterModalOpen(true)}
+        >
+          Filter
+        </div>
+      </div>
       <Filter
         category={category}
         setProducts={setProducts}
         setshowProduct={setshowProduct}
       />
 
-      <div className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-4 m-3">
-        {showProduct && displayProducts ? (
-          displayProducts.map((product) => (
-            <ProductCard key={product._id} product={product} />
-          ))
-        ) : (
-          <h1>No Products Found</h1>
-        )}
+      <div className="flex justify-center items-center md:items-start w-full mt-4">
+        <div className="grid xl:grid-cols-4 lg:grid-cols-3 sm:grid-cols-2 gap-4 m-3">
+          {showProduct && displayProducts ? (
+            displayProducts.map((product) => (
+              <ProductCard key={product._id} product={product} />
+            ))
+          ) : (
+            <h1>No Products Found</h1>
+          )}
+        </div>
       </div>
+
+      {filterModalOpen && (
+        <FilterModal
+          isOpen={filterModalOpen}
+          onClose={() => setFilterModalOpen(false)}
+          category={category}
+          setProducts={setProducts}
+          setshowProduct={setshowProduct}
+          setFilterApplied={setFilterApplied}
+        />
+      )}
     </div>
   );
 };

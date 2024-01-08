@@ -28,18 +28,18 @@ const ProductHeaderCard = ({ image, name, price, id }) => {
   return (
     <Link to={`/product/${id}`}>
       <div
-        className={`flex flex-col justify-center items-center  w-full md:w-[262px] sm:w-[240px] h-auto sm:h-[350px] rounded-lg p-2 ${currentBackgroundColor}`}
+        className={`flex flex-col justify-center items-center w-auto h-auto sm:h-[350px] rounded-lg p-2 ${currentBackgroundColor}`}
       >
         <img
           src={image}
           alt={name}
           className="w-3/4 sm:w-[12rem] h-auto sm:h-[12rem] rounded-full"
         />
-        <h1 className="text-base sm:text-[18px] text-center mt-2 mb-2 font-bold">
+        <h1 className="text-base sm:text-[18px] w-full md:w-[220px] text-center mt-2 mb-2 font-bold">
           {name.length > 20 ? name.substring(0, 30) + "..." : name}
         </h1>
         <h1 className="text-base sm:text-[18px] text-center mt-2 mb-2 font-bold">
-          ${price}
+          ₹{price}
         </h1>
       </div>
     </Link>

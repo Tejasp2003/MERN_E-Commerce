@@ -108,10 +108,6 @@ const CategoryList = () => {
         }
     }
 
-
-
-
-
   return (
     <div className="ml-[10rem] flex flex-col md:flex-row">
       <AdminMenu />

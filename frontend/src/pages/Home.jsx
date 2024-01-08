@@ -6,6 +6,7 @@ import Loader from "../components/Loader.jsx";
 import Product from "./Products/Product.jsx";
 import ProductCarousel from "./Products/ProductCarsousel.jsx";
 import CategoryCarousel from "./Category/CategoryCarousel.jsx";
+import NewProducts from "./Products/NewProducts.jsx";
 
 const Home = () => {
   const { keyword } = useParams();
@@ -16,7 +17,7 @@ const Home = () => {
       <div className="flex flex-col justify-center items-center">
         <CategoryCarousel />
         <ProductCarousel />
-
+        <NewProducts/>
         {/* <div className="flex justify-between items-center">
             <h1 className="ml-[20rem] mt-[10rem] text-[3rem]">
               Special Products
