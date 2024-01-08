@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 const backgroundColors = [
   "bg-red-200",
@@ -23,29 +23,31 @@ const backgroundColors = [
 
 let globalColorIndex = 0;
 
-const CategoryCard = ({ name, image}) => {
+const CategoryCard = ({ name, image, index }) => {
+  console.log(index);
   // Get the current background color using the globalColorIndex
   const currentBackgroundColor = backgroundColors[globalColorIndex];
 
   // Increment the globalColorIndex for the next card
-  globalColorIndex = (globalColorIndex + 1) % backgroundColors.length;
+  globalColorIndex = (globalColorIndex + index) % backgroundColors.length;
+  console.log(globalColorIndex);
 
   return (
-    <div className="flex flex-col justify-center items-center hover:scale-110 transition duration-300 ease-in-out cursor-pointer overflow-hidden min-w-fit"
-          onClick={() => {
-            window.location.href = `/products?category=${name}`;
-          }
-        }
-        >
-
-
+    <div
+      className="flex flex-col justify-center items-center hover:scale-110 transition duration-300 ease-in-out cursor-pointer overflow-hidden min-w-fit"
+      onClick={() => {
+        window.location.href = `/products?category=${name}`;
+      }}
+    >
       <div
-        className={`flex flex-col justify-center items-center w-[90px] h-[90px] rounded-[50%]  ${currentBackgroundColor}`}
+        className={`flex flex-col justify-center items-center w-[90px] h-[90px] rounded-[50%] border-2 border-opacity-80 
+        `}
       >
         <img
           src={image}
           alt={name}
-          className={`w-full h-full rounded-full object-cover bg-red-200 p-2 ${currentBackgroundColor}`}
+          // custom animation to show border left and roght and after 5 sec border top and bottom.. infint animation
+          className={`w-full h-full rounded-full object-cover p-2 ${currentBackgroundColor}`}
           style={{ contain: "content" }}
         />
       </div>

@@ -9,8 +9,9 @@ const CategoryCarousel = () => {
       
       <div className="w-screen flex flex-row space-x-8 mt-4 ml-32 mr-32 p-4 overflow-x-scroll scrollbar-hide">
         {categories &&
-          categories.map((category) => (
+          categories.map((category, index) => (
             <CategoryCard
+            index={index}
               key={category._id}
               name={category.name}
               image={category.image}

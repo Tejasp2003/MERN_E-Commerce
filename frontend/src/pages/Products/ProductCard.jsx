@@ -2,7 +2,7 @@ import React from "react";
 import HeartIcon from "./HeartIcon";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { toast } from "react-hot-toast";
-import { useAddAndUpdateProductToCartMutation } from "../../redux/api/usersApiSlice.js";
+import { useAddAndUpdateProductToCartMutation, useGetUserCartQuery } from "../../redux/api/usersApiSlice.js";
 
 const backgroundColors = [
   "bg-red-200",
@@ -27,20 +27,22 @@ const backgroundColors = [
 
 let globalColorIndex = 0;
 const ProductCard = ({ product }) => {
-
   const [addAndUpdateProductToCart] = useAddAndUpdateProductToCartMutation();
+  const { data: cartItems, refetch } = useGetUserCartQuery();
 
   console.log(product);
-  
+  console.log(cartItems);
+
   const handleAddToCart = async () => {
     try {
       await addAndUpdateProductToCart({
-        productId: product._id,
+        productId: product?._id,
         quantity: 1,
       });
+      refetch();
       toast.success("Added to cart");
     } catch (error) {
-      toast.error("Something went wrong.. Try again")
+      toast.error("Something went wrong.. Try again");
     }
   };
 
@@ -52,7 +54,7 @@ const ProductCard = ({ product }) => {
 
   return (
     <div
-      className={`flex flex-col justify-center items-center relative h-[400px] rounded-lg ${currentBackgroundColor} p-2 shadow-slate-200 shadow-lg `}
+      className={`flex flex-col justify-center items-center relative h-[300px] sm:h-[400px] rounded-lg ${currentBackgroundColor} p-2 shadow-slate-200 shadow-lg `}
     >
       <div
         className="flex flex-col justify-center items-center "
@@ -63,24 +65,24 @@ const ProductCard = ({ product }) => {
         <img
           src={product?.image}
           alt={product?.name}
-          className={`!w-[200px] !h-[200px] rounded-full object-contain mt-[-40px] border-2 bg-white`}
+          className={`w-[120px] h-[120px] sm:!w-[200px] sm:!h-[200px] rounded-full object-contain mt-[-40px] bg-white`}
         />
 
-        <h1 className="text-[18px] font-bold flex flex-wrap mt-2 text-center">
+        <h1 className="text-[12px] sm:text-[18px] font-bold flex flex-wrap mt-2 text-center">
           {product?.name.length > 20
-            ? product?.name.substring(0, 40) + "..."
+            ? product?.name.substring(0, 30) + "..."
             : product?.name}
         </h1>
-        <div className="flex flex-row justify-between items-center w-full mt-10 pl-4 pr-4">
+        <div className="flex flex-row !justify-between items-center w-full mt-4 sm:mt-10 pl-4 pr-4">
           <p
-            className={` text-[14px] font-bold flex flex-wrap text-center ${anotherBackgroundColor} border-2 border-black p-2 rounded-full`}
+            className={` text-[12px] font-bold flex flex-wrap text-center ${anotherBackgroundColor} border-2 border-black p-1 sm:p-2 rounded-full`}
           >
             {product.brand}
           </p>
-          <p className="text-lg text-black font-bold">₹{product.price}</p>
+          <p className="text-lg text-black font-bold text-[12px]">₹{product.price}</p>
         </div>
       </div>
-      <div className="absolute top-2 right-2 cursor-pointer">
+      <div className="absolute top-0 right-[-12px] cursor-pointer">
         <HeartIcon product={product} />
       </div>
       <div

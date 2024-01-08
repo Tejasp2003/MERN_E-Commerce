@@ -9,6 +9,7 @@ import {
 } from "../redux/api/usersApiSlice.js";
 import toast from "react-hot-toast";
 import EmptyCart from "../components/EmptyCart.jsx";
+import { useEffect } from "react";
 
 const backgroundColors = [
   "bg-red-200",
@@ -41,6 +42,10 @@ const Cart = () => {
   const navigate = useNavigate();
 
   console.log(cartItems);
+
+  useEffect(() => {
+    refetch();
+  }, [cartItems?.length, refetch]);
 
   const addToCartHandler = async (productId, qty) => {
     try {

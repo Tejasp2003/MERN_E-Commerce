@@ -4,6 +4,7 @@ import { useGetUserFavoriteProductsQuery } from "../../redux/api/usersApiSlice";
 const FavoritesCount = () => {
   const {data:favProducts} = useGetUserFavoriteProductsQuery();
 
+  console.log(favProducts);
   return (
     <div className="absolute bottom-0 left-4">
       {favProducts && (

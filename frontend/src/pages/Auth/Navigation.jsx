@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   AiOutlineHome,
   AiOutlineShopping,
@@ -15,20 +15,17 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
-  useGetUserCartQuery,
   useLogoutMutation,
 } from "../../redux/api/usersApiSlice.js";
 import { logout } from "../../redux/features/auth/authSlice.js";
 import Search from "../../components/Search.jsx";
 import FavoritesCount from "../Products/FavoritesCount.jsx";
+import CartCount from "../Products/CartCount.jsx";
 
 const Navigation = () => {
   const { userInfo } = useSelector((state) => state.auth);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [showSidebar, setShowSidebar] = useState(false);
-  const [cartItemsCount, setCartItemsCount] = useState(0);
-
-  const { data: cartItems } = useGetUserCartQuery();
 
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
@@ -51,15 +48,6 @@ const Navigation = () => {
   };
 
 
-  useEffect(() => {
-    if (cartItems) {
-      setCartItemsCount(cartItems.length);
-    }
-  }
-  , [cartItems]);
-
-
-
   return (
     <>
       <nav className="hidden lg:flex flex-row w-full justify-between items-center p-4 bg-rose-400 z-100">
@@ -75,9 +63,9 @@ const Navigation = () => {
         </div>
         <div className="flex flex-row space-x-6 mr-6">
           <Link to="/cart" className="flex items-center justify-start realtive">
-            <span className="absolute top-[0.78rem] right-[153px] bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
-              {cartItemsCount}
-            </span>
+            <div className="relative">
+              <CartCount />
+              </div>
             <AiOutlineShoppingCart size={26} />
           </Link>
 
