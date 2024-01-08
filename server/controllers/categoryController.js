@@ -1,4 +1,5 @@
 import asyncHandler from "../middlewares/asyncHandler.js";
+import Product from "../models/productModel.js";
 import Category from "../models/categoryModel.js";
 
 const createCategory = asyncHandler(async (req, res) => {
@@ -76,4 +77,25 @@ const getCategoryById= asyncHandler(async(req, res)=>{
     }
 })
 
-export { createCategory, updateCategory, deleteCategory, getAllCategories, getCategoryById};
+const getTotalProductByCategory = asyncHandler(async (req, res) => {
+  try {
+    const products = await Product.find({});
+    const categories = await Category.find({});
+    const totalProductsByCategory = categories.map((category) => {
+      return {
+        _id: category._id,
+        name: category.name,
+        totalProducts: products.filter(
+          (product) => product.category._id.toString() === category._id.toString()
+        ).length,
+        image: category.image,
+      };
+    });
+    res.status(200).json(totalProductsByCategory);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+export { createCategory, updateCategory, deleteCategory, getAllCategories, getCategoryById, getTotalProductByCategory};
