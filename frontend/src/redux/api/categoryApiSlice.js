@@ -33,7 +33,13 @@ export const categoryApiSlice = apiSlice.injectEndpoints({
       }),
     }),
 
-    
+    getTotalProductsByCategory: builder.query({
+      query: () => ({
+        url: `${CATEGORY_URL}/total-products-by-category`,
+        method: "GET",
+      }),
+    }),
+
   }),
 });
 
@@ -42,4 +48,5 @@ export const {
   useUpdateCategoryMutation,
   useDeleteCategoryMutation,
   useGetCategoriesQuery,
+  useGetTotalProductsByCategoryQuery,
 } = categoryApiSlice;

@@ -1,161 +1,98 @@
-import { useEffect, useState } from "react";
-import {
-  useCreateCategoryMutation,
-  useDeleteCategoryMutation,
-  useGetCategoriesQuery,
-  useUpdateCategoryMutation,
-} from "../../redux/api/categoryApiSlice";
-import CategoryForm from "../../components/CategoryForm";
-import {toast} from "react-hot-toast";
-import Modal from "../../components/Modal";
-import AdminMenu from "./AdminMenu";
+import React from "react";
+import { useGetTotalProductsByCategoryQuery } from "../../redux/api/categoryApiSlice";
+import { AiOutlineEdit, AiOutlineDelete, AiOutlinePlus } from "react-icons/ai";
 
 const CategoryList = () => {
-  const [name, setName] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [updatingName, setUpdatingName] = useState("");
-  const [modalVisible, setModalVisible] = useState(false);
-  const [image, setImage] = useState("");
-  const [updatingImage, setUpdatingImage] = useState("");
-
-  const [createCategory] = useCreateCategoryMutation();
-  const [updateCategory] = useUpdateCategoryMutation();
-  const [deleteCategory] = useDeleteCategoryMutation();
-  const { data: categories, refetch } = useGetCategoriesQuery();
-
-
-
-  useEffect(() => {
-    if (selectedCategory) {
-      setUpdatingName(selectedCategory.name);
-      setUpdatingImage(selectedCategory.image);
-    }
-  }, [selectedCategory]);
-
-  console.log(categories);
-
-  console.log("Image", image )
-
-  const handleCreateCategory = async (e) => {
-    e.preventDefault();
-    if (!name) {
-        toast.error("Category name is required");
-        return;
-    }
-    if(!image){
-        toast.error("Category image is required");
-        return;
-    }
-    try {
-      const result = await createCategory({ name, image }).unwrap();
-      if(result.error){
-        toast.error(result.error);
-      }else{
-        setName("");
-        setImage("");
-        
-        refetch();
-        toast.success(`Category ${result.name} created`);
-      }
-    } catch (error) {
-      console.log(error);
-      toast.error(error.message);
-    }
+  const handleUpdateClick = (product) => {
+    // Add your logic for handling the update action
+    console.log(`Update clicked for product: ${product.name}`);
+    handleUpdate(product);
   };
 
-    const handleUpdateCategory = async (e) => {
-        e.preventDefault();
-      
-       
+  const handleDeleteClick = (productId) => {
+    // Add your logic for handling the delete action
+    console.log(`Delete clicked for product with ID: ${productId}`);
+    handleDelete(productId);
+  };
 
-        try {
-            const result = await updateCategory({
-                id: selectedCategory._id,
-                category: { name: updatingName, 
-                    image: updatingImage
-                },
-            }).unwrap();
-            if (result.error) {
-                toast.error(result.error);
-            } else {
-                setModalVisible(false);
-                setImage("");
-                setUpdatingImage("");
-                refetch();
-                toast.success(`Category ${result.name} updated`);
-            }
-        } catch (error) {
-            console.log(error);
-            toast.error(error.message);
-        }
-    }
+  const handleAddCategoryClick = () => {
+    // Add your logic for handling the add action
+    console.log(`Add clicked`);
+    handleAdd();
+  };
 
-    const handleDeleteCategory = async (e) => {
-        e.preventDefault();
-        try {
-            const result = await deleteCategory(selectedCategory._id).unwrap();
-            console.log(result);
-            if (result.error) {
-                toast.error(result.error);
-            } else {
-                setModalVisible(false);
-                refetch();
-                toast.success(`Category ${result.name} deleted`);
-            }
-        } catch (error) {
-            console.log(error);
-            toast.error(error.message);
-        }
-    }
+  const { data: totalProducts } = useGetTotalProductsByCategoryQuery();
 
   return (
-    <div className="ml-[10rem] flex flex-col md:flex-row">
-      <AdminMenu />
-      <div className="md:w-3/4 p-3">
-        <div className="h-12">Manage Categories</div>
-        <CategoryForm
-          value={name}
-          setValue={setName}
-          handleSubmit={handleCreateCategory}
-          setImage={setImage}
-          image={image}
+    <div className="overflow-x-auto">
+      <div className="flex justify-between items-center mb-2 p-4">
+        <h1 className="text-2xl font-semibold text-gray-700">Categories</h1>
+        <button
+          onClick={handleAddCategoryClick}
+          className="flex items-center p-2 bg-rose-500 font-semibold text-white rounded-md hover:bg-blue-600 focus:outline-none"
+        >
+          <AiOutlinePlus className="mr-2" />
+          Add New Category
+        </button>
+      </div>
+      <div className="flex justify-between items-center mb-4 p-4">
+        <table className="min-w-full bg-white border border-gray-300 shadow-md rounded-md">
+          <thead>
+            <tr className="bg-gray-100">
+              <th className="border border-gray-300 px-4 py-2">Sr. No</th>
+              <th className="border border-gray-300 px-4 py-2">Image</th>
+              <th className="border border-gray-300 px-4 py-2">
+                Category Name
+              </th>
+              <th className="border border-gray-300 px-4 py-2">
+                Total Products
+              </th>
+              <th className="border border-gray-300 px-4 py-2">Actions</th>
+            </tr>
+          </thead>
+          <tbody className="text-center">
+            {totalProducts &&
+              totalProducts.map((product, index) => (
+                <tr key={product._id}>
+                  <td className="border border-gray-300 px-4 py-2">
+                    {index + 1}
+                  </td>
 
-        />
-        <br />
-        <hr />
+                  <td className="border border-gray-300 px-4 py-2 text-center">
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                      className="w-20 h-20 object-cover rounded-full text-center mx-auto border-2 border-gray-200"
+                    />
+                  </td>
 
-        <div className="flex flex-wrap">
-          {categories?.map((category) => (
-            <div key={category._id}>
-              <button
-                className="bg-white border border-pink-500 text-pink-500 py-2 px-4 rounded-lg m-3 hover:bg-pink-500 hover:text-white focus:outline-none foucs:ring-2 focus:ring-pink-500 focus:ring-opacity-50"
-                onClick={() => {
-                  {
-                    setModalVisible(true);
-                    setSelectedCategory(category);
-                    setUpdatingName(category.name);
-                  }
-                }}
-              >
-                {category.name}
-              </button>
-            </div>
-          ))}
-        </div>
+                  <td className="border border-gray-300 px-4 py-2">
+                    {product.name}
+                  </td>
+                  <td className="border border-gray-300 px-4 py-2">
+                    {product.totalProducts}
+                  </td>
 
-        <Modal isOpen={modalVisible} onClose={() => setModalVisible(false)}>
-          <CategoryForm
-            value={updatingName}
-            setValue={(value) => setUpdatingName(value)}
-            handleSubmit={handleUpdateCategory}
-            handleDelete={handleDeleteCategory}
-            updatingImage={updatingImage}
-            setImage={setUpdatingImage}
-            
-
-
-          />
-        </Modal>
+                  <td className="border border-gray-300 px-4 py-2 flex justify-center items-center flex-row gap-4 ">
+                    <button
+                      onClick={() => handleUpdateClick(product)}
+                      className="flex items-center p-2 bg-blue-500 font-semibold text-white rounded-md hover:bg-blue-600 focus:outline-none"
+                    >
+                      <AiOutlineEdit className="mr-2" />
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => handleDeleteClick(product._id)}
+                      className="flex items-center p-2 bg-red-500 font-semibold text-white rounded-md hover:bg-blue-600 focus:outline-none"
+                    >
+                      <AiOutlineDelete className="mr-2" />
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );
