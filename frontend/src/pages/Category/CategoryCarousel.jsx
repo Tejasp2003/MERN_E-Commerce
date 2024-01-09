@@ -4,6 +4,7 @@ import CategoryCard from "./CategoryCard";
 
 const CategoryCarousel = () => {
   const { data: categories } = useGetCategoriesQuery();
+  console.log(categories);
   return (
     <>
       
