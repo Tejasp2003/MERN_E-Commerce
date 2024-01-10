@@ -80,7 +80,7 @@ const Cart = () => {
         </div>
       ) : (
         <div className="flex flex-col md:flex-row justify-between gap-4 items-start">
-          <div className="flex-1">
+          <div className="w-full">
             <h1 className="text-2xl font-semibold mb-4 text-center md:text-left">
               Shopping Cart
             </h1>
@@ -99,7 +99,7 @@ const Cart = () => {
                 return (
                   <div
                     key={item._id}
-                    className={`flex flex-col md:flex-row items-center gap-4 p-2 rounded-xl shadow relative ${currentBackgroundColor} mb-4`}
+                    className={`flex flex-col md:flex-row !w-full items-center gap-4 p-2 rounded-xl shadow relative ${currentBackgroundColor} mb-4`}
                   >
                     <div className="w-28 h-28 md:w-48 md:h-48 flex-shrink-0">
                       <img

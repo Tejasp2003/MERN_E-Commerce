@@ -252,13 +252,24 @@ const Navigation = () => {
               <span className="">ACCOUNT</span>{" "}
             </Link>
 
-            <button
-              onClick={logoutHandler}
-              className="flex items-center justify-center  hover:bg-rose-200 p-3 rounded-md hover:scale-110 transform transition duration-300 ease-in-out"
-            >
-              <AiOutlineLogout className="mr-2" size={26} />
-              <span className="">LOGOUT</span>{" "}
-            </button>
+            {userInfo ? (
+              <button
+                onClick={logoutHandler}
+                className="flex items-center justify-center  hover:bg-rose-200 p-3 rounded-md hover:scale-110 transform transition duration-300 ease-in-out"
+              >
+                <AiOutlineLogout className="mr-2" size={26} />
+                <span className="">LOGOUT</span>{" "}
+              </button>
+            ) : (
+              <Link
+                to="/login"
+                className="flex items-center justify-center  hover:bg-rose-200 p-3 rounded-md hover:scale-110 transform transition duration-300 ease-in-out"
+                onClick={() => setShowSidebar(false)}
+              >
+                <AiOutlineLogin className="mr-2" size={26} />
+                <span className="">LOGIN</span>{" "}
+              </Link>
+            )}
           </div>
         </div>
       )}
