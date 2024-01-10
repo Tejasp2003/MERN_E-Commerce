@@ -12,14 +12,20 @@ import orderRoutes from "./routes/orderRoutes.js";
 import cors from "cors";
 const app = express();
 
-app.use(cors());
+const corsOptions = {
+  origin: 'https://mern-e-commerce-pi.vercel.app/', // Replace with your actual frontend domain
+  credentials: true, // To allow cookies to be shared
+  optionsSuccessStatus: 200
+};
+
+app.use(cors(corsOptions));
 
 dotnev.config();
 
 const port = process.env.PORT || 5000;
 connectDB();
 
-console.log("authenticating user");
+
 
   
 
