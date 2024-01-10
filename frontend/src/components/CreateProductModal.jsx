@@ -142,23 +142,40 @@ const CreateProductModal = ({ onClose, isOpen, productId, refetch }) => {
 
   return (
     <div
-      className={`flex justify-center items-center h-[100vh] w-[100vw]  p-2 rounded-xl z-[500px] fixed top-0 left-0  ${
+      className={`flex justify-center items-center min-h-[100vh] w-[100vw] overflow-y-scroll p-2 rounded-xl z-[500px] fixed top-0 left-0  ${
         isOpen ? "block" : "hidden"
       }`}
       onClick={onClose}
     >
       <div className="fixed inset-0 bg-black opacity-50"></div>
       <div
-        className="flex flex-col justify-center h-full my-auto items-center bg-white p-4 rounded-xl w-[90%] md:w-[70%] z-10"
+        className="flex flex-col justify-start h-[80vh] my-auto items-center bg-white p-4 rounded-xl w-[90%] md:w-[70%] z-10
+          overflow-y-scroll
+        "
         onClick={handleInputClick}
       >
-        <h1 className="text-2xl font-bold text-black mb-4">
+
+        <div className="flex justify-between items-center w-full">
+        <h1 className="text-2xl font-bold text-black mb-4 w-full">
           {isUpdate ? "Update/Delete Product" : "Add New Product"}
         </h1>
+       {/* cross button */}
+        <div className="flex justify-end w-full">
+          <button
+            className="bg-red-500 text-white p-2 h-8 w-8 rounded-md flex justify-center items-center"
+            onClick={onClose}
+          >
+            X
+          </button>
+        </div>
+        </div>
+
         <div className="flex flex-col justify-center items-center mb-4 w-full">
           {/* create product  */}
           <div className="flex flex-col justify-center items-center mb-4 gap-3 w-full">
-            <div className="flex flex-col md:flex-row w-full gap-3 items-start md:items-center justify-center font-semibold">
+            <div className="flex flex-col md:flex-row w-full gap-3 items-start md:items-center justify-between font-semibold">
+            <div className="flex flex-col w-full">
+
               <label htmlFor="name">Name:</label>
               <input
                 type="text"
@@ -167,6 +184,9 @@ const CreateProductModal = ({ onClose, isOpen, productId, refetch }) => {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
               />
+            </div>
+            <div className="flex flex-col w-full">
+
               <label htmlFor="brand">Brand:</label>
               <input
                 type="text"
@@ -175,6 +195,7 @@ const CreateProductModal = ({ onClose, isOpen, productId, refetch }) => {
                 value={brand}
                 onChange={(e) => setBrand(e.target.value)}
               />
+              </div>
             </div>
             <div className="flex flex-col w-full gap-3 items-start justify-start font-semibold">
               <label htmlFor="description">Description:</label>
@@ -188,6 +209,9 @@ const CreateProductModal = ({ onClose, isOpen, productId, refetch }) => {
             </div>
 
             <div className="flex flex-col md:flex-row w-full gap-3 items-start md:items-center justify-center font-semibold">
+            <div className="flex flex-col w-full">
+              <label htmlFor="category">Category:</label>
+            
               <select
                 className="border-2 border-gray-400 rounded-md p-2 w-full focus:outline-none focus:border-blue-500"
                 placeholder="Choose Category"
@@ -201,6 +225,9 @@ const CreateProductModal = ({ onClose, isOpen, productId, refetch }) => {
                   </option>
                 ))}
               </select>
+              </div>
+              
+              <div className="flex flex-col w-full">
               <label htmlFor="stock">Count In Stock:</label>
               <input
                 type="number"
@@ -209,8 +236,10 @@ const CreateProductModal = ({ onClose, isOpen, productId, refetch }) => {
                 value={stock}
                 onChange={(e) => setStock(e.target.value)}
               />
+              </div>
             </div>
             <div className="flex flex-col md:flex-row w-full gap-3 items-start md:items-center justify-center font-semibold">
+            <div className="flex flex-col w-full">
               <label htmlFor="price">Price:</label>
               <input
                 type="number"
@@ -219,6 +248,8 @@ const CreateProductModal = ({ onClose, isOpen, productId, refetch }) => {
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
               />
+              </div>
+              <div className="flex flex-col w-full">
               <label htmlFor="quantity">Quantity:</label>
               <input
                 type="number"
@@ -227,6 +258,7 @@ const CreateProductModal = ({ onClose, isOpen, productId, refetch }) => {
                 value={quantity}
                 onChange={(e) => setQuantity(e.target.value)}
               />
+              </div>
             </div>
             <div className="flex flex-col gap-2 items-center justify-center">
               {imageUrl && (
