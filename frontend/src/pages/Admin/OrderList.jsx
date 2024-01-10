@@ -10,7 +10,7 @@ import moment from "moment";
 import { useGetOrdersQuery } from "../../redux/api/orderApiSlice";
 import Loader from "../../components/Loader";
 import Message from "../../components/Message";
-import { AiOutlinePlus } from "react-icons/ai";
+import { BiSortAlt2 } from "react-icons/bi";
 
 const overlappingImagesStyle = {
   display: "flex",
@@ -22,7 +22,6 @@ const imageStyle = (index) => ({
   height: "40px",
   objectFit: "cover",
   borderRadius: "50%",
-
   marginLeft: index > 0 ? "-15px" : "0",
   zIndex: 100 - index,
 });
@@ -45,8 +44,9 @@ const OrderList = () => {
 
   const data = useMemo(
     () =>
-      filteredOrders.map((order) => ({
-        col1: (
+      filteredOrders.map((order, index) => ({
+        col1: index + 1,
+        col2: (
           <div style={overlappingImagesStyle}>
             {order.orderItems.map((item, index) => (
               <img
@@ -59,7 +59,6 @@ const OrderList = () => {
             ))}
           </div>
         ),
-        col2: order._id,
         col3: order.user.username,
         col4: moment(order.createdAt).format("MMMM Do YYYY"),
         col5: `₹ ${order.totalPrice}`,
@@ -94,15 +93,14 @@ const OrderList = () => {
     () => [
       {
         Header: "Sr. No",
-        accessor: (row, index) => index + 1,
+        accessor: "col1",
       },
-      { Header: "Items", accessor: "col1" },
-      { Header: "ID", accessor: "col2" },
-      { Header: "User", accessor: "col3" },
-      { Header: "Date", accessor: "col4" },
-      { Header: "Total", accessor: "col5" },
-      { Header: "Paid", accessor: "col6" },
-      { Header: "Delivered", accessor: "col7" },
+      { Header: "Items", accessor: "col2" },
+      { Header: "User", accessor: "col3", sortType: "alphanumeric" },
+      { Header: "Date", accessor: "col4", sortType: "basic" },
+      { Header: "Total", accessor: "col5", sortType: "basic" },
+      { Header: "Paid", accessor: "col6", sortType: "basic" },
+      { Header: "Delivered", accessor: "col7", sortType: "basic" },
       { Header: "", accessor: "col8" },
     ],
     []
@@ -171,10 +169,26 @@ const OrderList = () => {
               >
                 {headerGroup.headers.map((column) => (
                   <th
-                    {...column.getHeaderProps()}
+                    {...column.getHeaderProps(column.getSortByToggleProps())}
                     className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider text-center"
                   >
                     {column.render("Header")}
+                    <span>
+                      {column.isSorted ? (
+                        column.isSortedDesc ? (
+                          " 🔽"
+                        ) : (
+                          " 🔼"
+                        )
+                      ) : (
+                        <span
+                          className="cursor-pointer"
+                          style={{ fontSize: "1rem" }}
+                        >
+                          <BiSortAlt2 className="inline-block ml-1" size={16} />
+                        </span>
+                      )}
+                    </span>
                   </th>
                 ))}
               </tr>

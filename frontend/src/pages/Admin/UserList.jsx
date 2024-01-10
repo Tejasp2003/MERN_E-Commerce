@@ -11,6 +11,7 @@ import {
 } from '../../redux/api/usersApiSlice';
 import { useDispatch } from 'react-redux';
 import { setCredentials } from '../../redux/features/auth/authSlice';
+import { BiSortAlt2 } from 'react-icons/bi';
 
 const UserList = () => {
   const { data: users, isLoading, error, refetch } = useGetUsersQuery();
@@ -82,63 +83,69 @@ const UserList = () => {
 
   const data = useMemo(
     () =>
-      filteredUsers.map((user) => ({
-        col1: user._id,
-        col2: editableUserId === user._id ? (
-          <input
-            type="text"
-            value={editableUserName}
-            onChange={(e) => setEditableUserName(e.target.value)}
-            className="w-full p-2 border rounded-lg"
-          />
-        ) : (
-          user.username
-        ),
-        col3: editableUserId === user._id ? (
-          <input
-            type="text"
-            value={editableUserEmail}
-            onChange={(e) => setEditableUserEmail(e.target.value)}
-            className="w-full p-2 border rounded-lg"
-          />
-        ) : (
-          <a href={`mailto:${user.email}`}>{user.email}</a>
-        ),
-        col4: user.isAdmin ? 'Yes' : 'No',
-        col5: editableUserId === user._id ? (
-          <button
-            onClick={() => updateHandler(user._id)}
-            className="bg-blue-500 text-white py-2 px-4 rounded-lg"
-          >
-            <FaCheck />
-          </button>
-        ) : (
-          <>
+      filteredUsers.map((user, index) => ({
+        col1: index + 1,
+        col2:
+          editableUserId === user._id ? (
+            <input
+              type="text"
+              value={editableUserName}
+              onChange={(e) => setEditableUserName(e.target.value)}
+              className="w-full p-2 border rounded-lg"
+            />
+          ) : (
+            user.username
+          ),
+        col3:
+          editableUserId === user._id ? (
+            <input
+              type="text"
+              value={editableUserEmail}
+              onChange={(e) => setEditableUserEmail(e.target.value)}
+              className="w-full p-2 border rounded-lg"
+            />
+          ) : (
+            <a href={`mailto:${user.email}`}>{user.email}</a>
+          ),
+        col4: user.isAdmin ? "Yes" : "No",
+        col5:
+          editableUserId === user._id ? (
             <button
-              onClick={() => toggleEdit(user._id, user.username, user.email)}
-              className="mr-2 bg-yellow-500 text-white py-2 px-4 rounded-lg"
+              onClick={() => updateHandler(user._id)}
+              className="bg-blue-500 text-white py-2 px-4 rounded-lg"
             >
-              <FaEdit />
+              <FaCheck />
             </button>
-            <button
-              onClick={() => deleteHandler(user._id)}
-              className="bg-red-500 text-white py-2 px-4 rounded-lg"
-            >
-              <FaTrash />
-            </button>
-          </>
-        ),
+          ) : (
+            <>
+              <button
+                onClick={() => toggleEdit(user._id, user.username, user.email)}
+                className="mr-2 bg-yellow-500 text-white py-2 px-4 rounded-lg"
+              >
+                <FaEdit />
+              </button>
+              <button
+                onClick={() => deleteHandler(user._id)}
+                className="bg-red-500 text-white py-2 px-4 rounded-lg"
+              >
+                <FaTrash />
+              </button>
+            </>
+          ),
       })),
     [filteredUsers, editableUserId, editableUserName, editableUserEmail]
   );
 
   const columns = useMemo(
     () => [
-      { Header: 'ID', accessor: 'col1' },
-      { Header: 'Name', accessor: 'col2' },
-      { Header: 'Email', accessor: 'col3' },
-      { Header: 'Admin', accessor: 'col4' },
-      { Header: 'Actions', accessor: 'col5' },
+      {
+        Header: "Sr. No",
+        accessor: "col1",
+      },
+      { Header: "Name", accessor: "col2" },
+      { Header: "Email", accessor: "col3" },
+      { Header: "Admin", accessor: "col4" },
+      { Header: "Actions", accessor: "col5" },
     ],
     []
   );
@@ -173,8 +180,6 @@ const UserList = () => {
       <div className="flex justify-between items-center mb-2 p-4">
         <h1 className="text-2xl font-semibold text-gray-700">Users</h1>
         <div className="flex items-center space-x-4">
-          
-        
           <input
             type="text"
             value={globalFilter || ""}
@@ -185,36 +190,61 @@ const UserList = () => {
         </div>
       </div>
       <div className="flex justify-between items-center mb-4 p-4 rounded-xl">
-      <table {...getTableProps()} className="min-w-full divide-y divide-gray-200">
-        <thead className="bg-gray-50">
-          {headerGroups.map((headerGroup) => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((column) => (
-                <th
-                  {...column.getHeaderProps(column.getSortByToggleProps())}
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                >
-                  {column.render('Header')}
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody {...getTableBodyProps()} className="bg-white divide-y divide-gray-200">
-          {page.map((row) => {
-            prepareRow(row);
-            return (
-              <tr {...row.getRowProps()}>
-                {row.cells.map((cell) => (
-                  <td {...cell.getCellProps()} className="px-6 py-4 whitespace-nowrap">
-                    {cell.render('Cell')}
-                  </td>
+        <table
+          {...getTableProps()}
+          className="min-w-full divide-y divide-gray-200"
+        >
+          <thead className="bg-gray-50">
+            {headerGroups.map((headerGroup) => (
+              <tr {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map((column) => (
+                  <th
+                    {...column.getHeaderProps(column.getSortByToggleProps())}
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    {column.render("Header")}
+                    <span>
+                      {column.isSorted ? (
+                        column.isSortedDesc ? (
+                          " 🔽"
+                        ) : (
+                          " 🔼"
+                        )
+                      ) : (
+                        <span
+                          className="cursor-pointer"
+                          style={{ fontSize: "1rem" }}
+                        >
+                          <BiSortAlt2 className="inline-block ml-1" size={16} />
+                        </span>
+                      )}
+                    </span>
+                  </th>
                 ))}
               </tr>
-            );
-          })}
-        </tbody>
-      </table>
+            ))}
+          </thead>
+          <tbody
+            {...getTableBodyProps()}
+            className="bg-white divide-y divide-gray-200"
+          >
+            {page.map((row) => {
+              prepareRow(row);
+              return (
+                <tr {...row.getRowProps()}>
+                  {row.cells.map((cell) => (
+                    <td
+                      {...cell.getCellProps()}
+                      className="px-6 py-4 whitespace-nowrap"
+                    >
+                      {cell.render("Cell")}
+                    </td>
+                  ))}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
       </div>
       <div className="flex justify-center items-center space-x-2 mb-2">
         <button

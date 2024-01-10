@@ -1,11 +1,15 @@
 import React, { useMemo, useState, useEffect } from "react";
-import { useTable, usePagination } from "react-table";
+import { useTable, usePagination, useSortBy } from "react-table";
 import { Link } from "react-router-dom";
 import moment from "moment";
-import { useAllProductsQuery, useDeleteProductMutation } from "../../redux/api/productApiSlice";
+import {
+  useAllProductsQuery,
+  useDeleteProductMutation,
+} from "../../redux/api/productApiSlice";
 import { AiOutlineDelete, AiOutlineEdit, AiOutlinePlus } from "react-icons/ai";
 import CreateProductModal from "../../components/CreateProductModal";
 import toast from "react-hot-toast";
+import { BiSortAlt2 } from "react-icons/bi";
 
 const AllProducts = () => {
   const { data: products, isLoading, isError, refetch } = useAllProductsQuery();
@@ -15,8 +19,7 @@ const AllProducts = () => {
 
   const [deleteProduct] = useDeleteProductMutation();
 
-
-  const toggleModal = () => { 
+  const toggleModal = () => {
     setId("");
     setShowCreateProductModal(true);
   };
@@ -78,31 +81,42 @@ const AllProducts = () => {
         accessor: "name",
         Cell: ({ value, row }) => (
           <span
-            className="
-        "
+            className="cursor-pointer"
+            onClick={() => {
+              setId(row.original._id);
+              setShowCreateProductModal(true);
+            }}
           >
             {value.length > 20 ? value.substring(0, 35) + "..." : value}
           </span>
         ),
+        // Adding sorting functionality for the 'Name' column
+        sortType: "alphanumeric",
       },
       {
         Header: "Brand",
         accessor: "brand",
-        Cell: ({ value }) => `${value}`,
+        // Adding sorting functionality for the 'Brand' column
+        sortType: "alphanumeric",
       },
       {
         Header: "In Stock",
         accessor: "countInStock",
-        Cell: ({ value }) => `${value}`,
+        // Adding sorting functionality for the 'In Stock' column
+        sortType: "basic",
       },
       {
         Header: "Created At",
         accessor: "createdAt",
+        // Adding sorting functionality for the 'Created At' column
+        sortType: "basic",
         Cell: ({ value }) => moment(value).format("MMMM Do YYYY"),
       },
       {
         Header: "Price",
         accessor: "price",
+        // Adding sorting functionality for the 'Price' column
+        sortType: "basic",
         Cell: ({ value }) => `₹ ${value}`,
       },
       {
@@ -138,7 +152,7 @@ const AllProducts = () => {
     [filteredProducts]
   );
 
-  // Use the useTable and usePagination hooks
+  // Use the useTable and usePagination hooks with sorting
   const {
     getTableProps,
     getTableBodyProps,
@@ -152,8 +166,13 @@ const AllProducts = () => {
     setPageSize,
     rows,
 
-    state: { pageIndex, pageSize },
-  } = useTable({ columns, data }, usePagination);
+    state: { pageIndex, pageSize, sortBy },
+  } = useTable({ columns, data }, useSortBy, usePagination);
+
+  useEffect(() => {
+    // Trigger a refetch whenever the sorting changes
+    refetch();
+  }, [refetch, sortBy]);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -197,10 +216,26 @@ const AllProducts = () => {
               >
                 {headerGroup.headers.map((column) => (
                   <th
-                    {...column.getHeaderProps()}
+                    {...column.getHeaderProps(column.getSortByToggleProps())}
                     className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider text-center"
                   >
                     {column.render("Header")}
+                    <span>
+                      {column.isSorted ? (
+                        column.isSortedDesc ? (
+                          " 🔽"
+                        ) : (
+                          " 🔼"
+                        )
+                      ) : (
+                        <span
+                          className="cursor-pointer"
+                          style={{ fontSize: "1rem" }}
+                        >
+                          <BiSortAlt2 className="inline-block ml-1" size={16} />
+                        </span>
+                      )}
+                    </span>
                   </th>
                 ))}
               </tr>
