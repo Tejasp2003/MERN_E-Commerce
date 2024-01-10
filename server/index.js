@@ -13,6 +13,15 @@ import orderRoutes from './routes/orderRoutes.js';
 
 dotnev.config();
 
+// solve cors error
+import cors from 'cors';
+const corsOptions = {
+  origin: "https://mern-ekart.vercel.app/",
+  credentials: true,
+  optionsSuccessStatus: 200,
+};
+app.use(cors(corsOptions));
+
 const port = process.env.PORT || 5000;  
 connectDB();
 const app = express();
