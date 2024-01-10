@@ -12,14 +12,9 @@ import orderRoutes from "./routes/orderRoutes.js";
 import cors from "cors";
 const app = express();
 
-const corsOptions = {
-  origin: 'https://mern-e-commerce-ll0n0fmjn-tejasp2003.vercel.app', // Replace with your actual frontend domain
-  credentials: true, // To allow cookies to be shared
-  optionsSuccessStatus: 200,
-  
-};
 
-app.use(cors(corsOptions));
+
+app.use(cors({ origin: true, credentials: true }));
 
 dotnev.config();
 
