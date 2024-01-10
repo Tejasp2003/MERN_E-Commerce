@@ -3,7 +3,8 @@ import User from "../models/userModel.js";
 import asyncHandler from "./asyncHandler.js";
 
 const authenticate = asyncHandler(async (req, res, next) => {
-    const token = req.cookies.jwt;
+    const token = req?.cookies?.jwt;
+    console.log("token: ", token);
     if (!token) {
         res.status(401);
         throw new Error("Unauthorized");
