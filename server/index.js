@@ -13,7 +13,7 @@ import cors from "cors";
 const app = express();
 
 const corsOptions = {
-  origin: 'https://mern-e-commerce-pi.vercel.app/', // Replace with your actual frontend domain
+  origin: '*', // Replace with your actual frontend domain
   credentials: true, // To allow cookies to be shared
   optionsSuccessStatus: 200
 };
