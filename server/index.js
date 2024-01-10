@@ -19,6 +19,9 @@ dotnev.config();
 const port = process.env.PORT || 5000;
 connectDB();
 
+console.log("authenticating user");
+
+  
 
 app.use(express.json());
 app.use(cookieParser());
@@ -28,6 +31,8 @@ app.use(express.urlencoded({ extended: true })); // for parsing application/x-ww
 app.get("/api/config/paypal", (req, res) => {
   res.send({ clientId: process.env.PAYPAL_CLIENT_ID });
 });
+
+
 
 app.use("/api/users", userRoutes);
 app.use("/api/category", categoryRoutes);
