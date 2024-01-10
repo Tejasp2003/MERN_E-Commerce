@@ -100,7 +100,7 @@ const UpdateCategoryModal = ({
         className="flex flex-col justify-center items-center bg-white p-4 rounded-xl w-[600px] z-10"
         onClick={handleInputClick}
       >
-        <h1 className="text-2xl font-bold text-black mb-4">Create Category</h1>
+        <h1 className="text-2xl font-bold text-black mb-4">Update Category</h1>
         <hr
           className="w-full border-2 border-white mb-4"
           style={{ height: "1px" }}
@@ -126,18 +126,18 @@ const UpdateCategoryModal = ({
             <img
               src={image}
               alt="Uploaded Category"
-              className="w-32 h-32 object-cover rounded-full mb-2"
+              className="w-32 h-32 object-cover rounded-full mb-2 border-2 border-blue-400"
             />
           )}
           <button
-            className="bg-white text-black font-semibold p-2 rounded-md hover:bg-gray-200 focus:outline-none"
+            className="bg-blue-200 text-black font-semibold p-2 rounded-md hover:bg-gray-200 focus:outline-none"
             onClick={openCloudinaryWidget}
           >
             Upload Image
           </button>
 
           <button
-            className="bg-black text-white font-semibold p-2 rounded-md hover:bg-gray-800 focus:outline-none mt-4"
+            className="bg-black text-white font-semibold p-2 rounded-md hover:bg-gray-800 focus:outline-none mt-4 w-full"
             onClick={handleUpdateCategory}
           >
             Update Category

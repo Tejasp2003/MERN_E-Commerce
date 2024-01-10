@@ -111,18 +111,18 @@ const CreateCategoryModal = ({ isOpen, onClose, refetch }) => {
             <img
               src={image}
               alt="Uploaded Category"
-              className="w-32 h-32 object-cover rounded-full mb-2"
+              className="w-32 h-32 object-cover rounded-full mb-2 border-2 border-blue-400"
             />
           )}
           <button
-            className="bg-white text-black font-semibold p-2 rounded-md hover:bg-gray-200 focus:outline-none"
+            className="bg-blue-200 text-black font-semibold p-2 rounded-md hover:bg-gray-200 focus:outline-none"
             onClick={openCloudinaryWidget}
           >
             Upload Image
           </button>
 
           <button
-            className="bg-black text-white font-semibold p-2 rounded-md hover:bg-gray-800 focus:outline-none mt-4"
+            className="bg-black text-white font-semibold p-2 rounded-md hover:bg-gray-800 focus:outline-none mt-4 w-full"
             onClick={handleCreateCategory}
           >
             Create Category

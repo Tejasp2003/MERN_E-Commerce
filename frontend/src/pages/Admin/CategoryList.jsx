@@ -13,6 +13,7 @@ import {
 import CreateCategoryModal from "../../components/CreateCategoryModal.";
 import UpdateCategoryModal from "../../components/UpdateCategoryModal";
 import AdminMenu from "./AdminMenu";
+import { BiSortAlt2 } from "react-icons/bi";
 
 const CategoryList = () => {
   const [showCreateCategoryModal, setShowCreateCategoryModal] = useState(false);
@@ -139,9 +140,9 @@ const CategoryList = () => {
       <div className="flex justify-between items-center mb-4 p-4 rounded-xl">
         <table
           {...getTableProps()}
-          className="min-w-full bg-gray-200 border border-gray-300 shadow-md rounded-xl overflow-hidden"
+          className="min-w-full border border-gray-300 shadow-md rounded-xl overflow-hidden"
         >
-          <thead className="bg-gray-50">
+          <thead className="bg-gray-100">
             {headerGroups?.map((headerGroup) => (
               <tr {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup?.headers?.map((column) => (
@@ -151,11 +152,23 @@ const CategoryList = () => {
                   >
                     {column.render("Header")}
                     <span>
-                      {column.isSorted
-                        ? column.isSortedDesc
-                          ? " 🔽"
-                          : " 🔼"
-                        : ""}
+                      {column.isSorted ? (
+                        column.isSortedDesc ? (
+                          " 🔽"
+                        ) : (
+                          " 🔼"
+                        )
+                      ) : (
+                        <span
+                          className="cursor-pointer"
+                          style={{ fontSize: "1rem" }}
+                        >
+                          <BiSortAlt2 
+                            className="inline-block ml-1"
+                            size={16}
+                          />
+                        </span>
+                      )}
                     </span>
                   </th>
                 ))}

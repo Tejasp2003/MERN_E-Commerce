@@ -92,11 +92,9 @@ const AdminDashboard = () => {
 
   return (
     <>
-      <AdminMenu />
-
-      <section className="xl:ml-[4rem] md:ml-[0rem]">
+      <section className="xl:ml-[4rem] md:ml-[0rem] text-white">
         <div className="w-[80%] flex justify-around flex-wrap">
-          <div className="rounded-lg bg-black p-5 w-[20rem] mt-5">
+          <div className="rounded-lg bg-black text-white p-5 w-[20rem] mt-5">
             <div className="font-bold rounded-full w-[3rem] bg-pink-500 text-center p-3">
               ₹
             </div>
@@ -106,7 +104,7 @@ const AdminDashboard = () => {
               ₹ {isLoading ? <Loader /> : sales?.toFixed(2)}
             </h1>
           </div>
-          <div className="rounded-lg bg-black p-5 w-[20rem] mt-5">
+          <div className="rounded-lg bg-black text-white p-5 w-[20rem] mt-5">
             <div className="font-bold rounded-full w-[3rem] bg-pink-500 text-center p-3">
               ₹
             </div>

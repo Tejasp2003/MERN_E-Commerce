@@ -1,88 +1,244 @@
-import Message from "../../components/Message";
-import Loader from "../../components/Loader";
+import React, { useMemo, useState, useEffect } from "react";
+import {
+  useTable,
+  usePagination,
+  useSortBy,
+  useGlobalFilter,
+} from "react-table";
 import { Link } from "react-router-dom";
-import { useGetOrdersQuery } from "../../redux/api/orderApiSlice.js";
-import AdminMenu from "./AdminMenu";
+import moment from "moment";
+import { useGetOrdersQuery } from "../../redux/api/orderApiSlice";
+import Loader from "../../components/Loader";
+import Message from "../../components/Message";
+import { AiOutlinePlus } from "react-icons/ai";
+
+const overlappingImagesStyle = {
+  display: "flex",
+  alignItems: "center",
+};
+
+const imageStyle = (index) => ({
+  width: "40px",
+  height: "40px",
+  objectFit: "cover",
+  borderRadius: "50%",
+
+  marginLeft: index > 0 ? "-15px" : "0",
+  zIndex: 100 - index,
+});
 
 const OrderList = () => {
   const { data: orders, isLoading, error } = useGetOrdersQuery();
+  const [search, setSearch] = useState("");
+
+  const filteredOrders = useMemo(() => {
+    if (!orders) return [];
+
+    return search
+      ? orders.filter(
+          (order) =>
+            order._id.toLowerCase().includes(search.toLowerCase()) ||
+            order.user.username.toLowerCase().includes(search.toLowerCase())
+        )
+      : orders;
+  }, [orders, search]);
+
+  const data = useMemo(
+    () =>
+      filteredOrders.map((order) => ({
+        col1: (
+          <div style={overlappingImagesStyle}>
+            {order.orderItems.map((item, index) => (
+              <img
+                key={index}
+                src={item.image}
+                alt={item.name}
+                style={imageStyle(index)}
+                className="rounded-full border-2 border-gray-500 text-center m-2"
+              />
+            ))}
+          </div>
+        ),
+        col2: order._id,
+        col3: order.user.username,
+        col4: moment(order.createdAt).format("MMMM Do YYYY"),
+        col5: `₹ ${order.totalPrice}`,
+        col6: order.isPaid ? (
+          <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+            Paid
+          </span>
+        ) : (
+          <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+            Not Paid
+          </span>
+        ),
+        col7: order.isDelivered ? (
+          <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+            Delivered
+          </span>
+        ) : (
+          <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+            Not Delivered
+          </span>
+        ),
+        col8: (
+          <Link to={`/order/${order._id}`}>
+            <button className="bg-green-400 p-2 rounded-lg">Details</button>
+          </Link>
+        ),
+      })),
+    [filteredOrders]
+  );
+
+  const columns = useMemo(
+    () => [
+      {
+        Header: "Sr. No",
+        accessor: (row, index) => index + 1,
+      },
+      { Header: "Items", accessor: "col1" },
+      { Header: "ID", accessor: "col2" },
+      { Header: "User", accessor: "col3" },
+      { Header: "Date", accessor: "col4" },
+      { Header: "Total", accessor: "col5" },
+      { Header: "Paid", accessor: "col6" },
+      { Header: "Delivered", accessor: "col7" },
+      { Header: "", accessor: "col8" },
+    ],
+    []
+  );
+
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    rows,
+    prepareRow,
+    page,
+    state: { pageIndex, pageSize, globalFilter },
+    setPageSize,
+    setGlobalFilter,
+    nextPage,
+    previousPage,
+    canNextPage,
+    canPreviousPage,
+  } = useTable(
+    { columns, data, initialState: { pageIndex: 0, pageSize: 5 } },
+    useGlobalFilter,
+    useSortBy,
+    usePagination
+  );
+
+  useEffect(() => {
+    setSearch(search); // Trigger re-render on search change
+  }, [search]);
+
+  if (isLoading) {
+    return <Loader />;
+  }
+
+  if (error) {
+    return (
+      <Message variant="danger">{error?.data?.message || error.error}</Message>
+    );
+  }
 
   return (
-    <>
-      {isLoading ? (
-        <Loader />
-      ) : error ? (
-        <Message variant="danger">
-          {error?.data?.message || error.error}
-        </Message>
-      ) : (
-        <table className="container mx-auto">
-          <AdminMenu />
+    <div className="overflow-x-auto">
+      <div className="flex justify-between items-center mb-2 p-4">
+        <h1 className="text-2xl font-semibold text-gray-700">Orders</h1>
+        <div className="flex items-center space-x-4">
+          <input
+            type="text"
+            value={globalFilter || ""}
+            onChange={(e) => setGlobalFilter(e.target.value)}
+            placeholder="Search..."
+            className="border border-gray-300 p-2 rounded-md"
+          />
+        </div>
+      </div>
 
-          <thead className="w-full border">
-            <tr className="mb-[5rem]">
-              <th className="text-left pl-1">ITEMS</th>
-              <th className="text-left pl-1">ID</th>
-              <th className="text-left pl-1">USER</th>
-              <th className="text-left pl-1">DATA</th>
-              <th className="text-left pl-1">TOTAL</th>
-              <th className="text-left pl-1">PAID</th>
-              <th className="text-left pl-1">DELIVERED</th>
-              <th></th>
-            </tr>
+      <div className="flex justify-between items-center mb-4 p-4 rounded-xl">
+        <table
+          {...getTableProps()}
+          className="min-w-full bg-gray-200 border border-gray-300 shadow-md rounded-xl overflow-hidden"
+        >
+          <thead className="bg-gray-50">
+            {headerGroups.map((headerGroup) => (
+              <tr
+                {...headerGroup.getHeaderGroupProps()}
+                className="text-center"
+              >
+                {headerGroup.headers.map((column) => (
+                  <th
+                    {...column.getHeaderProps()}
+                    className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider text-center"
+                  >
+                    {column.render("Header")}
+                  </th>
+                ))}
+              </tr>
+            ))}
           </thead>
-
-          <tbody>
-            {orders?.map((order) =>
-              order?.orderItems?.map((item) => (
-                <tr key={item._id}>
-                  <td className="py-2">
-                    <img
-                      src={item.image}
-                      alt={item.name}
-                      className="w-[6rem] mb-5"
-                    />
-                  </td>
-                  <td className="py-2">{order._id}</td>
-                  <td className="py-2">{order.user.username}</td>
-                  <td className="py-2">{order.createdAt.substring(0, 10)}</td>
-                  <td className="py-2">₹ {order.totalPrice}</td>
-                  <td className="py-2">
-                    {order.isPaid ? (
-                      <p className="p-1 text-center bg-green-400 w-[6rem] rounded-full">
-                        {order.paidAt.substring(0, 10)}
-                      </p>
-                    ) : (
-                      <p className="p-1 text-center bg-red-400 w-[6rem] rounded-full">
-                        Not Paid
-                      </p>
-                    )}
-                  </td>
-                  <td className="py-2">
-                    {order.isDelivered ? (
-                      <p className="p-1 text-center bg-green-400 w-[6rem] rounded-full">
-                        {order.deliveredAt.substring(0, 10)}
-                      </p>
-                    ) : (
-                      <p className="p-1 text-center bg-red-400 w-[6rem] rounded-full">
-                        Not Delivered
-                      </p>
-                    )}
-                  </td>
-                  <td className="py-2">
-                    <Link to={`/order/${order._id}`}>
-                      <button className="bg-green-400 p-2 rounded-lg">
-                        Details
-                      </button>
-                    </Link>
-                  </td>
+          <tbody {...getTableBodyProps()} className="text-center">
+            {page.map((row) => {
+              prepareRow(row);
+              return (
+                <tr {...row.getRowProps()} className="bg-white border-b">
+                  {row.cells.map((cell) => (
+                    <td
+                      {...cell.getCellProps()}
+                      className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
+                    >
+                      {cell.render("Cell")}
+                    </td>
+                  ))}
                 </tr>
-              ))
-            )}
+              );
+            })}
           </tbody>
         </table>
-      )}
-    </>
+      </div>
+      <div className="flex justify-center items-center space-x-2 mb-2">
+        <button
+          onClick={() => previousPage()}
+          disabled={!canPreviousPage}
+          className={`px-2 py-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm ${
+            !canPreviousPage ? "cursor-not-allowed opacity-50" : ""
+          }`}
+        >
+          Previous
+        </button>
+        <span>
+          Page{" "}
+          <strong>
+            {pageIndex + 1} of {Math.ceil(rows.length / pageSize)}
+          </strong>{" "}
+        </span>
+        <button
+          onClick={() => nextPage()}
+          disabled={!canNextPage}
+          className={`px-2 py-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm ${
+            !canNextPage ? "cursor-not-allowed opacity-50" : ""
+          }`}
+        >
+          Next
+        </button>
+        <select
+          className="px-2 py-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          value={pageSize}
+          onChange={(e) => {
+            setPageSize(Number(e.target.value));
+          }}
+        >
+          {[5, 10, 20].map((pageSize) => (
+            <option key={pageSize} value={pageSize}>
+              Show {pageSize}
+            </option>
+          ))}
+        </select>
+      </div>
+    </div>
   );
 };
 

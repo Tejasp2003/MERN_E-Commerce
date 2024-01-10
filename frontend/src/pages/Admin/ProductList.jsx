@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   useCreateProductMutation,
-  
 } from "../../redux/api/productApiSlice.js";
 import { useGetCategoriesQuery } from "../../redux/api/categoryApiSlice.js";
 import { toast } from "react-hot-toast";
@@ -20,9 +19,11 @@ const ProductList = () => {
   const [imageUrl, setImageUrl] = useState(null);
   const navigate = useNavigate();
 
+  const [showCreateProductModal, setShowCreateProductModal] = useState(false);
+
   
   const [createProduct] = useCreateProductMutation();
-  const { data: categories } = useGetCategoriesQuery();
+  const { data: categories, refetch } = useGetCategoriesQuery();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -109,9 +110,15 @@ const ProductList = () => {
   
   return (
     <div className="container mx-auto p-4">
+
+      <button
+        className="border text-white bg-blue-500 hover:bg-blue-700 px-4 block w-full text-center rounded-lg cursor-pointer font-bold py-2"
+        onClick={() => setShowCreateProductModal(true)}
+      >
+        Create Product
+      </button>
       <div className="flex flex-wrap">
         <div className="w-full md:w-1/4 px-4">
-          <AdminMenu />
         </div>
         <div className="w-full md:w-3/4 px-4">
           <h2 className="text-xl font-bold mb-4">Create Product</h2>

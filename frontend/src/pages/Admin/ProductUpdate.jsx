@@ -58,18 +58,6 @@ const AdminProductUpdate = () => {
     }
   }, [productData, categories]);
 
-  // const uploadFileHandler = async (e) => {
-  //   const formData = new FormData();
-  //   formData.append("image", e.target.files[0]);
-  //   try {
-  //     const res = await uploadProductImage(formData).unwrap();
-  //     toast.success("Item added successfully");
-  //     setImage(res.imageUrl);
-  //   } catch (err) {
-  //     toast.success("Item added successfully");
-  //   }
-  // };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -84,7 +72,6 @@ const AdminProductUpdate = () => {
       formData.append("countInStock", stock);
       console.log("Category", category);
 
-      // Update product using the RTK Query mutation
       const { data } = await updateProduct({ productId: params._id, formData });
 
       if (data?.error) {

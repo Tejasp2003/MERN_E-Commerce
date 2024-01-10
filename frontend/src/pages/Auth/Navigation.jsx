@@ -14,13 +14,13 @@ import {
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  useLogoutMutation,
-} from "../../redux/api/usersApiSlice.js";
+import { useLogoutMutation } from "../../redux/api/usersApiSlice.js";
 import { logout } from "../../redux/features/auth/authSlice.js";
 import Search from "../../components/Search.jsx";
 import FavoritesCount from "../Products/FavoritesCount.jsx";
 import CartCount from "../Products/CartCount.jsx";
+import { FaChartLine } from "react-icons/fa";
+import { MdInsertChartOutlined } from "react-icons/md";
 
 const Navigation = () => {
   const { userInfo } = useSelector((state) => state.auth);
@@ -47,7 +47,6 @@ const Navigation = () => {
     }
   };
 
-
   return (
     <>
       <nav className="hidden lg:flex flex-row w-full justify-between items-center p-4 bg-rose-400 z-100">
@@ -57,24 +56,67 @@ const Navigation = () => {
               <h1 className="text-3xl font-bold text-white">E-Kart</h1>
             </Link>
           </div>
-          <div className="w-full">
-            <Search />
-          </div>
+          {!userInfo?.isAdmin && (
+            <div className="w-full">
+              <Search />
+            </div>
+          )}
         </div>
         <div className="flex flex-row space-x-6 mr-6">
-          <Link to="/cart" className="flex items-center justify-start realtive">
-            <div className="relative">
-              <CartCount />
-              </div>
-            <AiOutlineShoppingCart size={26} />
-          </Link>
-
-          <Link to="/favorites" className="flex items-center justify-start">
-            <div className="relative">
-              <FavoritesCount />
+          {userInfo?.isAdmin && (
+            <div className="flex flex-row space-x-6 mr-6">
+              <Link
+                to="/admin/dashboard"
+                className="flex items-center justify-start gap-2 rounded-md"
+              >
+                <span className="text-lg text-white">Dashboard</span>
+              </Link>
+              <Link
+                to="/admin/allproductslist"
+                className="flex items-center justify-start gap-2 rounded-md"
+              >
+                <span className="text-lg text-white">Manage Products</span>
+              </Link>
+              <Link
+                to="/admin/categorylist"
+                className="flex items-center justify-start gap-2 rounded-md"
+              >
+                <span className="text-lg text-white">Manage Categories</span>
+              </Link>
+              <Link
+                to="/admin/orderlist"
+                className="flex items-center justify-start gap-2 rounded-md"
+              >
+                <span className="text-lg text-white">Manage Orders</span>
+              </Link>
+              <Link
+                to="/admin/userlist"
+                className="flex items-center justify-start gap-2 rounded-md"
+              >
+                <span className="text-lg text-white">Manage Users</span>
+              </Link>
             </div>
-            <AiOutlineHeart size={26} />
-          </Link>
+          )}
+          {!userInfo?.isAdmin && (
+            <div className="flex flex-row space-x-6 mr-6">
+              <Link
+                to="/cart"
+                className="flex items-center justify-start realtive"
+              >
+                <div className="relative">
+                  <CartCount />
+                </div>
+                <AiOutlineShoppingCart size={26} />
+              </Link>
+
+              <Link to="/favorites" className="flex items-center justify-start">
+                <div className="relative">
+                  <FavoritesCount />
+                </div>
+                <AiOutlineHeart size={26} />
+              </Link>
+            </div>
+          )}
           {userInfo ? (
             <button
               onClick={toggleDropdown}
@@ -102,13 +144,15 @@ const Navigation = () => {
               <AiOutlineUserAdd size={23} />
               <span>PROFILE</span>{" "}
             </Link>
-            <Link
-              to="/user-orders"
-              className="flex items-center justify-start gap-2  rounded-md"
-            >
-              <AiOutlineShopping size={23} />
-              <span>MY ORDERS</span>{" "}
-            </Link>
+            {!userInfo?.isAdmin && (
+              <Link
+                to="/user-orders"
+                className="flex items-center justify-start gap-2  rounded-md"
+              >
+                <AiOutlineShopping size={23} />
+                <span>MY ORDERS</span>{" "}
+              </Link>
+            )}
             <button
               onClick={logoutHandler}
               className="flex items-center justify-start gap-2 rounded-md"
