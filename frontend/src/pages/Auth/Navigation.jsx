@@ -210,6 +210,7 @@ const Navigation = () => {
             <Link
               to="/"
               className="flex items-center gap-2 justify-center hover:bg-rose-200 p-3 rounded-md hover:scale-110 transform transition duration-300 ease-in-out"
+              onClick={() => setShowSidebar(false)}
             >
               <AiOutlineHome size={26} />
               <span>HOME</span>{" "}
@@ -218,6 +219,7 @@ const Navigation = () => {
             <Link
               to="/cart"
               className="flex items-center gap-2 justify-center   hover:bg-rose-200 p-3 rounded-md hover:scale-110 transform transition duration-300 ease-in-out"
+              onClick={() => setShowSidebar(false)}
             >
               <AiOutlineShoppingCart size={26} />
               <span>CART</span>{" "}
@@ -226,6 +228,7 @@ const Navigation = () => {
             <Link
               to="/favorites"
               className="flex items-center gap-2 justify-center  hover:bg-rose-200 p-3 rounded-md hover:scale-110 transform transition duration-300 ease-in-out"
+              onClick={() => setShowSidebar(false)}
             >
               <AiOutlineHeart size={26} />
               <span>FAVORITES</span>{" "}
@@ -234,6 +237,7 @@ const Navigation = () => {
             <Link
               to="/user-orders"
               className="flex items-center justify-center gap-2 hover:bg-rose-200 p-3 rounded-md hover:scale-110 transform transition duration-300 ease-in-out"
+              onClick={() => setShowSidebar(false)}
             >
               <AiOutlineShopping size={26} />
               <span>ORDERS</span>{" "}
@@ -242,6 +246,7 @@ const Navigation = () => {
             <Link
               to="/account"
               className="flex items-center justify-center gap-2 hover:bg-rose-200 p-3 rounded-md hover:scale-110 transform transition duration-300 ease-in-out"
+              onClick={() => setShowSidebar(false)}
             >
               <AiOutlineUserAdd className="mr-2" size={26} />
               <span className="">ACCOUNT</span>{" "}
