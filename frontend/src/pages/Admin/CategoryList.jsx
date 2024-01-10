@@ -127,7 +127,6 @@ const CategoryList = () => {
             <AiOutlinePlus className="mr-2" />
             Add New Category
           </button>
-          <AdminMenu />
           <input
             type="text"
             value={globalFilter || ""}
