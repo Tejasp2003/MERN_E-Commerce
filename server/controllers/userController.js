@@ -148,11 +148,8 @@ const updateUserById = asyncHandler(async (req, res) => {
 
 const addProductToFavorites = asyncHandler(async (req, res) => {
   try {
-    const { cartId } = req.body;
+    const { productId } = req.body;
     const user = await User.findById(req.user._id);
-
-    console.log(user);
-    console.log(productId);
 
     if (!user) {
       res.status(404);

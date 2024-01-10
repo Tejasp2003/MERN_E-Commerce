@@ -188,6 +188,16 @@ const filterProducts = asyncHandler(async (req, res) => {
   }
 });
 
+const fetchRandomProducts = asyncHandler(async (req, res) => {
+  try {
+    const products = await Product.aggregate([{ $sample: { size: 20 } }]);
+    res.status(200).send(products);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Internal server error");
+  }
+});
+
 
 const getProductByCategory = asyncHandler(async (req, res) => {
   try {
@@ -245,4 +255,5 @@ export {
   filterProducts,
   getProductByCategory,
   getBrandsUsingCategory,
+  fetchRandomProducts,
 };

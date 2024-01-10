@@ -17,7 +17,8 @@ import {
   fetchNewProducts,
   filterProducts,
   getProductByCategory,
-  getBrandsUsingCategory
+  getBrandsUsingCategory,
+  fetchRandomProducts
 } from "../controllers/productController.js";
 
 const router = express.Router();
@@ -35,6 +36,7 @@ router.route("/:id/reviews").post(authenticate, checkId, addProductReview);
 
 router.get("/top", fetchTopProducts);
 router.get("/new", fetchNewProducts);
+router.get("/random", fetchRandomProducts);
 
 router
   .route("/:id")

@@ -56,11 +56,6 @@ const Navigation = () => {
               <h1 className="text-3xl font-bold text-white">E-Kart</h1>
             </Link>
           </div>
-          {!userInfo?.isAdmin && (
-            <div className="w-full">
-              <Search />
-            </div>
-          )}
         </div>
         <div className="flex flex-row space-x-6 mr-6">
           {userInfo?.isAdmin && (

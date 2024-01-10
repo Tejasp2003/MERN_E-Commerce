@@ -73,9 +73,9 @@ const ProductCard = ({ product }) => {
             ? product?.name.substring(0, 30) + "..."
             : product?.name}
         </h1>
-        <div className="flex flex-row !justify-between items-center w-full mt-4 sm:mt-10 pl-4 pr-4">
+        <div className="flex flex-col md:flex-row !justify-between items-center w-full mt-4 sm:mt-10 pl-4 pr-4 gap-3">
           <p
-            className={` text-[12px] font-bold flex flex-wrap text-center ${anotherBackgroundColor} border-2 border-black p-1 sm:p-2 rounded-full`}
+            className={`text-[12px] font-bold flex flex-wrap text-center ${anotherBackgroundColor} border-2 border-black p-1 sm:p-2 rounded-full`}
           >
             {product.brand}
           </p>

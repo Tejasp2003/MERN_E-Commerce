@@ -86,6 +86,10 @@ export const productApiSlice = apiSlice.injectEndpoints({
       }),
     }),
 
+    getRandomProducts: builder.query({
+      query: () => `${PRODUCT_URL}/random`,
+    }),
+
     getBrandsUsingCategory: builder.query({
       query: ({category}) => ({
         url: `${PRODUCT_URL}/product-brands`,
@@ -108,5 +112,6 @@ export const {
   useGetNewProductsQuery,
   useUploadProductImageMutation,
   useGetFilteredProductsQuery,
+  useGetRandomProductsQuery,
   useGetBrandsUsingCategoryQuery
 } = productApiSlice;

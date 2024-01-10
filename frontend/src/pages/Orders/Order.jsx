@@ -50,7 +50,7 @@ const Order = () => {
       try {
         await payOrder({ orderId, details });
         refetch();
-        toast.success("Order is paid");8
+        toast.success("Order is paid");
         await clearCart(userInfo._id);
       // reload
         window.location.reload();
@@ -62,9 +62,13 @@ const Order = () => {
   }
 
   function createOrder(data, actions) {
+    const totalPriceUSD = order.totalPrice / 73;
     return actions.order
       .create({
-        purchase_units: [{ amount: { value: order.totalPrice } }],
+        purchase_units: [
+          { amount: { value: totalPriceUSD.toFixed(2), currency_code: "USD" } },
+        ],
+        // purchase_units: [{ amount: { value: order.totalPrice } }],
       })
       .then((orderID) => {
         return orderID;
@@ -188,7 +192,7 @@ const Order = () => {
                     </div>
                     {order?.isPaid &&
                       order?.isDelivered &&
-                      !order?.user?.username === userInfo?.username && (
+                      order?.user?.username === userInfo?.username && (
                         <div
                           className="mt-3 sm:mt-0 border-2 border-rose-800 h-full p-2 rounded-lg bg-rose-500 text-white font-semibold flex items-center justify-center cursor-pointer hover:bg-rose-600"
                           onClick={() => {
@@ -278,8 +282,8 @@ const Order = () => {
         )}
 
         {loadingDeliver && <Loader />}
-        {userInfo && userInfo.isAdmin && order.isPaid ? (
-          !order.isDelivered ? (
+        {userInfo && order.isPaid ? (
+          userInfo.isAdmin && !order.isDelivered ? (
             <div>
               <button
                 type="button"
