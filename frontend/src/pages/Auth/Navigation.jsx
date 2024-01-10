@@ -67,33 +67,62 @@ const Navigation = () => {
             <div className="flex flex-row space-x-6 mr-6">
               <Link
                 to="/admin/dashboard"
-                className="flex items-center justify-start gap-2 rounded-md"
+                className="flex items-center justify-start gap-2 
+1
+                "
               >
-                <span className="text-lg text-white">Dashboard</span>
+                <span
+                  className="text-lg
+                  font-semibold p-2 hover:bg-rose-300  hover:rounded-xl
+
+                "
+                >
+                  Dashboard
+                </span>
               </Link>
               <Link
                 to="/admin/allproductslist"
                 className="flex items-center justify-start gap-2 rounded-md"
               >
-                <span className="text-lg text-white">Manage Products</span>
+                <span
+                  className="text-lg font-semibold p-2 hover:bg-rose-300  hover:rounded-xl
+"
+                >
+                  Products
+                </span>
               </Link>
               <Link
                 to="/admin/categorylist"
                 className="flex items-center justify-start gap-2 rounded-md"
               >
-                <span className="text-lg text-white">Manage Categories</span>
+                <span
+                  className="text-lg font-semibold p-2 hover:bg-rose-300  hover:rounded-xl
+"
+                >
+                  Categories
+                </span>
               </Link>
               <Link
                 to="/admin/orderlist"
                 className="flex items-center justify-start gap-2 rounded-md"
               >
-                <span className="text-lg text-white">Manage Orders</span>
+                <span
+                  className="text-lg font-semibold p-2 hover:bg-rose-300  hover:rounded-xl
+"
+                >
+                  Orders
+                </span>
               </Link>
               <Link
                 to="/admin/userlist"
                 className="flex items-center justify-start gap-2 rounded-md"
               >
-                <span className="text-lg text-white">Manage Users</span>
+                <span
+                  className="text-lg font-semibold p-2 hover:bg-rose-300  hover:rounded-xl
+"
+                >
+                  Users
+                </span>
               </Link>
             </div>
           )}

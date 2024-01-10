@@ -1,17 +1,22 @@
-import React, { useMemo, useState } from 'react';
-import { useTable, usePagination, useSortBy, useGlobalFilter } from 'react-table';
-import { FaTrash, FaEdit, FaCheck } from 'react-icons/fa';
-import Loader from '../../components/Loader';
-import Message from '../../components/Message';
-import { toast } from 'react-hot-toast';
+import React, { useMemo, useState } from "react";
+import {
+  useTable,
+  usePagination,
+  useSortBy,
+  useGlobalFilter,
+} from "react-table";
+import { FaTrash, FaEdit, FaCheck } from "react-icons/fa";
+import Loader from "../../components/Loader";
+import Message from "../../components/Message";
+import { toast } from "react-hot-toast";
 import {
   useDeleteUserMutation,
   useGetUsersQuery,
   useUpdateUserMutation,
-} from '../../redux/api/usersApiSlice';
-import { useDispatch } from 'react-redux';
-import { setCredentials } from '../../redux/features/auth/authSlice';
-import { BiSortAlt2 } from 'react-icons/bi';
+} from "../../redux/api/usersApiSlice";
+import { useDispatch } from "react-redux";
+import { setCredentials } from "../../redux/features/auth/authSlice";
+import { BiSortAlt2 } from "react-icons/bi";
 
 const UserList = () => {
   const { data: users, isLoading, error, refetch } = useGetUsersQuery();
@@ -20,15 +25,15 @@ const UserList = () => {
   const dispatch = useDispatch();
 
   const [editableUserId, setEditableUserId] = useState(null);
-  const [editableUserName, setEditableUserName] = useState('');
-  const [editableUserEmail, setEditableUserEmail] = useState('');
-  const [search, setSearch] = useState('');
+  const [editableUserName, setEditableUserName] = useState("");
+  const [editableUserEmail, setEditableUserEmail] = useState("");
+  const [search, setSearch] = useState("");
 
   const deleteHandler = async (id) => {
-    if (window.confirm('Are you sure?')) {
+    if (window.confirm("Are you sure?")) {
       try {
         await deleteUser(id).unwrap();
-        toast.success('User deleted successfully');
+        toast.success("User deleted successfully");
         refetch();
       } catch (error) {
         toast.error(error.data.message || error.error);
@@ -49,17 +54,23 @@ const UserList = () => {
         email: editableUserEmail,
       };
 
+      if (!editableUserName || !editableUserEmail) {
+        toast.error("Name and email are required");
+        return;
+      }
+
       await updateUser({
         userId: id,
         ...updatedData,
       }).unwrap();
 
-      const currentUserInfo = JSON.parse(localStorage.getItem('userInfo')) || {};
+      const currentUserInfo =
+        JSON.parse(localStorage.getItem("userInfo")) || {};
       const newUserInfo = { ...currentUserInfo, ...updatedData };
 
       dispatch(setCredentials(newUserInfo));
 
-      toast.success('User updated successfully');
+      toast.success("User updated successfully");
 
       setEditableUserId(null);
       refetch();
@@ -76,7 +87,16 @@ const UserList = () => {
           (user) =>
             user._id.toLowerCase().includes(search.toLowerCase()) ||
             user.username.toLowerCase().includes(search.toLowerCase()) ||
-            user.email.toLowerCase().includes(search.toLowerCase())
+            user.email.toLowerCase().includes(search.toLowerCase()) ||
+            user.email
+              .toLowerCase()
+              .split("@")[0]
+              .includes(search.toLowerCase()) ||
+            user.email
+              .toLowerCase()
+              .split("@")[1]
+              .includes(search.toLowerCase()) ||
+            user.isAdmin.toString().toLowerCase().includes(search.toLowerCase())
         )
       : users;
   }, [users, search]);
@@ -171,12 +191,11 @@ const UserList = () => {
     usePagination
   );
 
-
   if (isLoading) return <Loader />;
   if (error) return <Message variant="danger">{error.data.message}</Message>;
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="overflow-x-auto">
       <div className="flex justify-between items-center mb-2 p-4">
         <h1 className="text-2xl font-semibold text-gray-700">Users</h1>
         <div className="flex items-center space-x-4">
@@ -192,15 +211,15 @@ const UserList = () => {
       <div className="flex justify-between items-center mb-4 p-4 rounded-xl">
         <table
           {...getTableProps()}
-          className="min-w-full divide-y divide-gray-200"
+          className="min-w-full border border-gray-300 shadow-md rounded-xl overflow-hidden"
         >
-          <thead className="bg-gray-50">
+          <thead className="bg-gray-100 text-center">
             {headerGroups.map((headerGroup) => (
               <tr {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => (
                   <th
                     {...column.getHeaderProps(column.getSortByToggleProps())}
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
                   >
                     {column.render("Header")}
                     <span>
@@ -226,7 +245,7 @@ const UserList = () => {
           </thead>
           <tbody
             {...getTableBodyProps()}
-            className="bg-white divide-y divide-gray-200"
+            className="bg-white divide-y divide-gray-200 text-center"
           >
             {page.map((row) => {
               prepareRow(row);
@@ -246,7 +265,7 @@ const UserList = () => {
           </tbody>
         </table>
       </div>
-      <div className="flex justify-center items-center space-x-2 mb-2">
+      <div className="flex justify-center items-center space-x-2 mb-4">
         <button
           onClick={() => previousPage()}
           disabled={!canPreviousPage}

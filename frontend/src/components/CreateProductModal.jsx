@@ -7,7 +7,7 @@ import {
 } from "../redux/api/productApiSlice";
 import toast from "react-hot-toast";
 
-const CreateProductModal = ({ onClose, isOpen, productId, refetch }) => {
+const CreateProductModal = ({ onClose, isOpen, productId }) => {
   const [image, setImage] = useState("");
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -23,7 +23,7 @@ const CreateProductModal = ({ onClose, isOpen, productId, refetch }) => {
     if (productId) {
       setIsUpdate(true);
     }
-  }, []);
+  }, [ productId]);
 
   const { data: productData } = useGetProductByIdQuery(productId);
   console.log(productData);

@@ -12,7 +12,7 @@ import {
 } from "react-table";
 import CreateCategoryModal from "../../components/CreateCategoryModal.";
 import UpdateCategoryModal from "../../components/UpdateCategoryModal";
-import AdminMenu from "./AdminMenu";
+
 import { BiSortAlt2 } from "react-icons/bi";
 
 const CategoryList = () => {
@@ -147,7 +147,7 @@ const CategoryList = () => {
                 {headerGroup?.headers?.map((column) => (
                   <th
                     {...column.getHeaderProps(column.getSortByToggleProps())}
-                    className="px-6 py-3  text-xs font-medium text-gray-500 uppercase tracking-wider text-center"
+                    className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider text-center"
                   >
                     {column.render("Header")}
                     <span>
