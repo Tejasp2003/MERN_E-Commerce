@@ -8,7 +8,7 @@ const authenticate = asyncHandler(async (req, res, next) => {
         res.status(401);
         throw new Error("Unauthorized");
     }
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, `${process.env.JWT_SECRET}`);
     const user = await User.findById(decoded.userId).select("-password"); // this is to exclude the password field from the user object
     if (!user) {
         res.status(401);
