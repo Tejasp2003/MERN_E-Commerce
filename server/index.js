@@ -9,22 +9,20 @@ import categoryRoutes from './routes/categoryRoutes.js';
 import productRoutes from './routes/productRoutes.js';
 import uploadRoutes from './routes/uploadRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
+import cors from 'cors';
 
 
 dotnev.config();
 
-// solve cors error
-import cors from 'cors';
+const port = process.env.PORT || 5000;  
+connectDB();
+const app = express();
 const corsOptions = {
   origin: "https://mern-ekart.vercel.app/",
   credentials: true,
   optionsSuccessStatus: 200,
 };
 app.use(cors(corsOptions));
-
-const port = process.env.PORT || 5000;  
-connectDB();
-const app = express();
 
 app.use(express.json());
 app.use(cookieParser());
