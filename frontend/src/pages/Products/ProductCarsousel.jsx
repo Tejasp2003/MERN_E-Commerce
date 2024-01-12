@@ -3,6 +3,7 @@ import { useGetTopProductsQuery } from "../../redux/api/productApiSlice";
 import Message from "../../components/Message";
 import ProductHeaderCard from "./ProductHeaderCard";
 import { FaCircleChevronLeft, FaCircleChevronRight } from "react-icons/fa6";
+import ProductHeaderCardSkeleton from "../../components/Skeleton/ProductHeaderCardSkeleton";
 
 const ProductCarousel = () => {
   const getItemsPerPage = () => {
@@ -53,12 +54,12 @@ const ProductCarousel = () => {
 
   const getVisibleProducts = () => {
     let endIndex = currentIndex + itemsPerPage;
-    if (endIndex > products.length) {
+    if (endIndex > products?.length) {
       return products
-        .slice(currentIndex, products.length)
-        .concat(products.slice(0, endIndex - products.length));
+        .slice(currentIndex, products?.length)
+        .concat(products?.slice(0, endIndex - products?.length));
     }
-    return products.slice(currentIndex, endIndex);
+    return products?.slice(currentIndex, endIndex);
   };
 
   console.log("Current Index", currentIndex);
@@ -66,7 +67,11 @@ const ProductCarousel = () => {
     <div className="rounded-lg relative pr-4 pl-4 mt-6">
       {isLoading ? (
         // Loading state
-        <p>Loading...</p>
+        <div className="flex flex-row justify-center items-center overflow-hidden transition-transform duration-500 gap-[20px]">
+        {Array.from({ length: getItemsPerPage() }).map((_, index) => (
+          <ProductHeaderCardSkeleton key={index} />
+        ))}
+      </div>
       ) : error ? (
         <Message variant="danger">
           {error?.data?.message || error.error}
@@ -101,7 +106,7 @@ const ProductCarousel = () => {
           </button>
 
           <div className="flex flex-row justify-center items-center overflow-hidden transition-transform duration-500 gap-[20px]">
-            {getVisibleProducts().map((product) => (
+            {getVisibleProducts()?.map((product) => (
               <ProductHeaderCard
                 key={product._id}
                 id={product._id}

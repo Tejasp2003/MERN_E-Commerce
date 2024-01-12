@@ -54,7 +54,7 @@ const ProductCard = ({ product }) => {
 
   return (
     <div
-      className={`flex flex-col justify-center items-center relative h-[300px] sm:h-[400px] rounded-lg ${currentBackgroundColor} p-2 shadow-slate-200 shadow-lg `}
+      className={`flex flex-col justify-center items-center relative h-[300px] sm:h-[400px] rounded-lg ${currentBackgroundColor} p-2 shadow-slate-200 shadow-lg cursor-pointer `}
     >
       <div
         className="flex flex-col justify-center items-center "
