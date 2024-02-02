@@ -3,6 +3,7 @@ import HeartIcon from "./HeartIcon";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { toast } from "react-hot-toast";
 import { useAddAndUpdateProductToCartMutation, useGetUserCartQuery } from "../../redux/api/usersApiSlice.js";
+import { useSelector } from "react-redux";
 
 const backgroundColors = [
   "bg-red-200",
@@ -27,6 +28,7 @@ const backgroundColors = [
 
 let globalColorIndex = 0;
 const ProductCard = ({ product }) => {
+  const { userInfo } = useSelector((state) => state.auth);
   const [addAndUpdateProductToCart] = useAddAndUpdateProductToCartMutation();
   const { data: cartItems, refetch } = useGetUserCartQuery();
 
@@ -34,6 +36,10 @@ const ProductCard = ({ product }) => {
   console.log(cartItems);
 
   const handleAddToCart = async () => {
+    if (!userInfo) {
+      toast.error("Please login to add product to cart");
+      return;
+    }
     try {
       await addAndUpdateProductToCart({
         productId: product?._id,
@@ -54,7 +60,7 @@ const ProductCard = ({ product }) => {
 
   return (
     <div
-      className={`flex flex-col justify-center items-center relative h-[300px] sm:h-[400px] rounded-lg ${currentBackgroundColor} p-2 shadow-slate-200 shadow-lg `}
+      className={`flex flex-col justify-center items-center relative h-[300px] sm:h-[400px] rounded-lg ${currentBackgroundColor} p-2 shadow-slate-200 shadow-lg cursor-pointer `}
     >
       <div
         className="flex flex-col justify-center items-center "

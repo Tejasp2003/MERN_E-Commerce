@@ -293,7 +293,7 @@ const Order = () => {
                 Mark As Delivered
               </button>
             </div>
-          ) : (
+          ) : order.isDelivered && (
             <div>
               <Message variant="success">
                 Delivered on {order.deliveredAt}
