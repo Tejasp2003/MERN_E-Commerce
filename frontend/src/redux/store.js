@@ -14,6 +14,7 @@ const store = configureStore({
     shippingAddress: cartSliceReducer,
     shop: shopReducer,
   },
+  
 
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(apiSlice.middleware),

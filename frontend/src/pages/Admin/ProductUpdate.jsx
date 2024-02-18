@@ -1,11 +1,9 @@
 import { useState, useEffect } from "react";
-// import AdminMenu from "./AdminMenu";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   useUpdateProductMutation,
   useDeleteProductMutation,
   useGetProductByIdQuery,
-  useUploadProductImageMutation,
 } from "../../redux/api/productApiSlice.js";
 import { useGetCategoriesQuery } from "../../redux/api/categoryApiSlice.js";
 import { toast } from "react-hot-toast";
@@ -36,8 +34,6 @@ const AdminProductUpdate = () => {
 
   // Fetch categories using RTK Query
   const { data: categories = [] } = useGetCategoriesQuery();
-
-  const [uploadProductImage] = useUploadProductImageMutation();
 
   // Define the update product mutation
   const [updateProduct] = useUpdateProductMutation();

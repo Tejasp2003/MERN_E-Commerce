@@ -162,10 +162,7 @@ const CategoryList = () => {
                           className="cursor-pointer"
                           style={{ fontSize: "1rem" }}
                         >
-                          <BiSortAlt2 
-                            className="inline-block ml-1"
-                            size={16}
-                          />
+                          <BiSortAlt2 className="inline-block ml-1" size={16} />
                         </span>
                       )}
                     </span>

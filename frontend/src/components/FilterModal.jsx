@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
-import { FaStar } from "react-icons/fa6";
-import { useCreateReviewMutation, useGetBrandsUsingCategoryQuery, useGetFilteredProductsQuery } from "../redux/api/productApiSlice";
-import toast from "react-hot-toast";
+import {  useGetBrandsUsingCategoryQuery, useGetFilteredProductsQuery } from "../redux/api/productApiSlice";
+
 
 const FilterModal = ({ isOpen, onClose, category, setProducts, setshowProduct, setFilterApplied }) => {
   const { data: brands } = useGetBrandsUsingCategoryQuery({ category });
@@ -10,7 +9,7 @@ const FilterModal = ({ isOpen, onClose, category, setProducts, setshowProduct, s
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(0);
 
-  const { data: filteredProducts, refetch } = useGetFilteredProductsQuery({
+  const { data: filteredProducts} = useGetFilteredProductsQuery({
     checkedBrands,
     category,
     minPrice,

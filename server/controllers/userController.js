@@ -4,11 +4,12 @@ import bcrypt from "bcryptjs";
 import generateToken from "../utils/createToken.js";
 import Product from "../models/productModel.js";
 import mongoose from "mongoose";
+import crypto from "crypto";
+import sendVerificationEmail from "../utils/sendVerificationEmail.js";
 
 const createUser = asyncHandler(async (req, res) => {
   const { username, email, password } = req.body;
-  //   console.log(username, email, password);
-  console.log(req.body);
+
   if (!username || !email || !password) {
     res.status(400);
     throw new Error("Please fill all the fields");
@@ -20,6 +21,9 @@ const createUser = asyncHandler(async (req, res) => {
     throw new Error("User already exists");
   }
 
+
+  console.log("Creating user")
+
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -29,15 +33,32 @@ const createUser = asyncHandler(async (req, res) => {
     password: hashedPassword,
   });
 
+
+  console.log("newUser", newUser);
+
   try {
     const user = await newUser.save();
-    generateToken(res, user._id);
+    // Send verification email
+    const verificationToken = generateVerificationToken(); // Generate a verification token
+    console.log("verificationToken", verificationToken);
+    user.verificationToken = verificationToken;
+    await user.save();
+    await sendVerificationEmail(user.email, verificationToken); // Send the verification email
+    // generateToken(res, user._id);
     res.status(201).json(user);
   } catch (error) {
+    console.log(error);
     res.status(400);
     throw new Error("Invalid user data");
   }
 });
+
+// Add this function to generate a verification token
+function generateVerificationToken() {
+  // Generate a random token using crypto
+  const token = crypto.randomBytes(20).toString('hex');
+  return token;
+}
 
 // const dummy=  asyncHandler(async(req,res)=>{
 //   console.log(req.body)
@@ -51,6 +72,10 @@ const loginUser = asyncHandler(async (req, res) => {
   if (!existingUser) {
     res.status(400);
     throw new Error("User does not exist");
+  }
+  if (!existingUser.isEmailVerified) {
+    res.status(400);
+    throw new Error("Email not verified");
   }
   const passwordMatch = await bcrypt.compare(password, existingUser.password);
 
@@ -92,7 +117,6 @@ const updateCurrentUser = asyncHandler(async (req, res) => {
     res.status(404);
     throw new Error("User not found");
   }
-  // console.log(req.body)
   user.username = req.body.username ? req.body.username : user.username;
   user.email = req.body.email ? req.body.email : user.email;
   if (req.body.password) {
@@ -177,6 +201,30 @@ const addProductToFavorites = asyncHandler(async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 });
+
+
+const verifyEmail = asyncHandler(async (req, res) => {
+  const { token } = req.params;
+
+  console.log("token", token);
+  // Find user by verification token
+  const user = await User.findOne({ verificationToken: token });
+  console.log("user", user);
+
+  if (!user) {
+    res.status(400);
+    throw new Error("Invalid verification token");
+  }
+
+  // Update user status to indicate email is verified
+  user.isEmailVerified = true;
+  user.verificationToken = undefined; // Remove verification token
+  await user.save();
+
+  // Redirect user to login page
+  res.status(200).json({ message: "Email verified successfully" });
+});
+
 
 const removeProductFromFavorites = asyncHandler(async (req, res) => {
   try {
@@ -360,4 +408,7 @@ export {
   getUserCart,
   removeProductFromCart,
   clearCart,
+  generateVerificationToken,
+  generateToken,
+  verifyEmail,
 };

@@ -28,6 +28,7 @@ import UserOrder from "./pages/User/UserOrder.jsx";
 import OrderList from "./pages/Admin/OrderList.jsx";
 import AdminDashboard from "./pages/Admin/AdminDashboard.jsx";
 import ProductsPage from "./pages/Products/ProductsPage.jsx";
+import VerifyEmailPage from "./pages/Auth/VerifyEmailImage.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromChildren(
@@ -43,6 +44,8 @@ const router = createBrowserRouter(
       </Route>
 
       <Route path="/login" element={<Login />} />
+      <Route path="/verify-email/:token" element={<VerifyEmailPage />} />
+
       <Route path="/register" element={<Register />} />
       <Route path="/" index={true} element={<Home />} />
       <Route path="/product/:id" element={<ProductDetails />} />

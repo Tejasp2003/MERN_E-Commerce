@@ -16,11 +16,8 @@ import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useLogoutMutation } from "../../redux/api/usersApiSlice.js";
 import { logout } from "../../redux/features/auth/authSlice.js";
-import Search from "../../components/Search.jsx";
 import FavoritesCount from "../Products/FavoritesCount.jsx";
 import CartCount from "../Products/CartCount.jsx";
-import { FaChartLine } from "react-icons/fa";
-import { MdInsertChartOutlined } from "react-icons/md";
 
 const Navigation = () => {
   const { userInfo } = useSelector((state) => state.auth);

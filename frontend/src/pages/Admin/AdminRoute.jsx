@@ -6,7 +6,7 @@ const AdminRoute = () => {
   return userInfo && userInfo.isAdmin ? (
     <Outlet />
   ) : (
-    <Navigate to="/login" replace /> //rep[lace is used to replace the current page in the history stack
+    <Navigate to="/login" replace /> //replace is used to replace the current page in the history stack
   );
 };
 export default AdminRoute;

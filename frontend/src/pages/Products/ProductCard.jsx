@@ -32,8 +32,7 @@ const ProductCard = ({ product }) => {
   const [addAndUpdateProductToCart] = useAddAndUpdateProductToCartMutation();
   const { data: cartItems, refetch } = useGetUserCartQuery();
 
-  console.log(product);
-  console.log(cartItems);
+  
 
   const handleAddToCart = async () => {
     if (!userInfo) {

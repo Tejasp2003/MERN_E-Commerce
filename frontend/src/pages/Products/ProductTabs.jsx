@@ -62,14 +62,14 @@ const ProductTabs = ({
             </div>
 
             <div className="flex justify-center items-center w-full">
-              {product.reviews.map((review) => (
+              {product?.reviews?.map((review) => (
                 <div
                   key={review._id}
                   className="bg-stone-100 p-4 rounded-lg lg:w-[60rem] m-2 w-full"
                 >
                   <div className="flex justify-between">
                     <p className="text-rose-500 tracking-wider font-bold text-sm md:text-lg">
-                      {review.user === userInfo._id ? (
+                      {review.user === userInfo?._id ? (
                         <span>{review.name.toUpperCase()} (You) </span>
                       ) : (
                         review.name.toUpperCase()

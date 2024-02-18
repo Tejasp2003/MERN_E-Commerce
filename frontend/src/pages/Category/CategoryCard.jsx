@@ -24,13 +24,13 @@ const backgroundColors = [
 let globalColorIndex = 0;
 
 const CategoryCard = ({ name, image, index }) => {
-  console.log(index);
+  
   // Get the current background color using the globalColorIndex
   const currentBackgroundColor = backgroundColors[globalColorIndex];
 
   // Increment the globalColorIndex for the next card
   globalColorIndex = (globalColorIndex + index) % backgroundColors.length;
-  console.log(globalColorIndex);
+
 
   return (
     <div
@@ -46,7 +46,7 @@ const CategoryCard = ({ name, image, index }) => {
         <img
           src={image}
           alt={name}
-          // custom animation to show border left and roght and after 5 sec border top and bottom.. infint animation
+          // custom animation to show border left and roght and after 5 sec border top and bottom.. infinite animation
           className={`w-full h-full rounded-full object-cover p-2 ${currentBackgroundColor}`}
           style={{ contain: "content" }}
         />

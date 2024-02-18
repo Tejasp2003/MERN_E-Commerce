@@ -5,7 +5,7 @@ import {
 } from "../../redux/api/productApiSlice.js";
 import { useGetCategoriesQuery } from "../../redux/api/categoryApiSlice.js";
 import { toast } from "react-hot-toast";
-import AdminMenu from "./AdminMenu";
+
 
 const ProductList = () => {
   const [image, setImage] = useState("");
@@ -23,7 +23,7 @@ const ProductList = () => {
 
   
   const [createProduct] = useCreateProductMutation();
-  const { data: categories, refetch } = useGetCategoriesQuery();
+  const { data: categories } = useGetCategoriesQuery();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -56,20 +56,7 @@ const ProductList = () => {
     }
   };
 
-  // const uploadFileHandler = async (e) => {
-  //   const formData = new FormData();
-  //   formData.append("image", e.target.files[0]);
-
-  //   try {
-  //     const res = await uploadProductImage(formData).unwrap();
-  //     console.log(res);
-  //     toast.success(res.message);
-  //     setImage(res.imageUrl);
-  //     setImageUrl(res.imageUrl);
-  //   } catch (error) {
-  //     toast.error(error?.data?.message || error.error);
-  //   }
-  // };
+ 
 
   const openCloudinaryWidget = () => {
     window.cloudinary.openUploadWidget(

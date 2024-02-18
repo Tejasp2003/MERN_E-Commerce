@@ -19,6 +19,11 @@ const userSchema = mongoose.Schema({
         required:true,
         default:false
     },
+    isEmailVerified: {
+        type: Boolean,
+        default: false
+    },
+    verificationToken: String, // Add a field to store verification token
     favorites: {
         type:[mongoose.Schema.Types.ObjectId],
         ref:'Product',
@@ -39,9 +44,7 @@ const userSchema = mongoose.Schema({
     ]
 },{
     timestamps:true
-
-})
-
+});
 
 const User = mongoose.model('User',userSchema);
 export default User;

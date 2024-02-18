@@ -16,6 +16,7 @@ import {
   removeProductFromCart,
   addAndUpdateProductToCart,
   clearCart,
+  verifyEmail,
 } from "../controllers/userController.js";
 import {
   authenticate,
@@ -23,6 +24,9 @@ import {
 } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
+
+
+
 
 // Cart routes
 router.route("/cart").post(authenticate, addAndUpdateProductToCart);
@@ -36,12 +40,19 @@ router.route("/favorites").get(authenticate, getUserFavorites);
 router.route("/favorites").post(authenticate, addProductToFavorites);
 router.route("/favorites").delete(authenticate, removeProductFromFavorites);
 
+
+// verify-email no auth required
+router.route("/verify-email/:token").get(
+  verifyEmail
+);
 router
   .route("/")
   .post(createUser)
   .get(authenticate, authorizeAsAdmin, getAllUsers);
-// router.route("/test").post(dummy);
 router.route("/auth").post(loginUser);
+// no auth required for logout
+
+
 router.post("/logout", logoutCurrentUser);
 router
   .route("/profile")

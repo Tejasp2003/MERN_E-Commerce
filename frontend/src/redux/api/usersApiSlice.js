@@ -10,6 +10,14 @@ export const userApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
+
+    verifyEmail: builder.query({
+      query: (token) => ({
+        url: `${USERS_URL}/verify-email/${token}`,
+        method: "GET",
+      }),
+    }),
+
     logout: builder.mutation({
       query: () => ({
         url: `${USERS_URL}/logout`,
@@ -138,4 +146,5 @@ export const {
   useGetUserCartQuery,
   useRemoveProductFromCartMutation,
   useClearCartMutation,
+  useVerifyEmailQuery,
 } = userApiSlice;

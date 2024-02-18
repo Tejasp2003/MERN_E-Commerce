@@ -1,9 +1,8 @@
 import { useState } from "react";
-import { FaStar } from "react-icons/fa6";
 import { useCreateReviewMutation } from "../redux/api/productApiSlice";
 import toast from "react-hot-toast";
 
-const ReviewModal = ({ isOpen, onClose, productName, productId, userInfo }) => {
+const ReviewModal = ({ isOpen, onClose, productName, productId }) => {
   const [rating, setRating] = useState("");
   const [comment, setComment] = useState("");
 
@@ -15,8 +14,7 @@ const ReviewModal = ({ isOpen, onClose, productName, productId, userInfo }) => {
     setComment(e.target.value);
   };
 
-  const [createReview] =
-    useCreateReviewMutation();
+  const [createReview] = useCreateReviewMutation();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -84,9 +82,7 @@ const ReviewModal = ({ isOpen, onClose, productName, productId, userInfo }) => {
                 <option value="1">Poor &#9733;</option>
                 <option value="2">Fair &#9733;&#9733;</option>
                 <option value="3">Average &#9733;&#9733;&#9733;</option>
-                <option value="4">
-                  Good &#9733;&#9733;&#9733;&#9733;
-                </option>
+                <option value="4">Good &#9733;&#9733;&#9733;&#9733;</option>
                 <option value="5">
                   Excellent &#9733;&#9733;&#9733;&#9733;&#9733;
                 </option>

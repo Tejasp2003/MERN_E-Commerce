@@ -1,8 +1,5 @@
-import { useState, useEffect } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import Loader from "../../components/Loader";
-import { setCredentials } from "../../redux/features/auth/authSlice";
+import { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { useRegisterMutation } from "../../redux/api/usersApiSlice";
 import { toast } from "react-hot-toast";
 
@@ -12,10 +9,8 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const [isRegistered, setIsRegistered] = useState(false);
 
-  const { userInfo } = useSelector((state) => state.auth);
   const [register, { isLoading }] = useRegisterMutation();
 
   const { search } = useLocation();
@@ -31,24 +26,18 @@ const Register = () => {
     }
 
     try {
-      const data = await register({
+      setIsRegistered(true);
+      await register({
         username: userName,
         email,
         password,
       }).unwrap();
-      dispatch(setCredentials({ ...data }));
-      navigate(redirect);
-      toast.success("Registered successfully");
     } catch (error) {
       toast.error(error.data.message);
     }
   };
 
-  useEffect(() => {
-    if (userInfo) {
-      navigate(redirect);
-    }
-  }, [userInfo, navigate, redirect]);
+  console.log("isRegistered", isRegistered);
 
   return (
     <div className="flex justify-center items-center min-h-screen -mt-9 bg-rose-100">
@@ -56,6 +45,13 @@ const Register = () => {
         <h1 className="text-3xl font-semibold mb-6 text-center text-pink-500">
           Register to E-KART
         </h1>
+
+        {isRegistered && (
+          <div className="mb-4 text-green-600 bg-rose-200/50 rounded-xl p-2">
+            A verification email has been sent to your email address. Please
+            check your inbox and follow the instructions to verify your email.
+          </div>
+        )}
 
         <form onSubmit={submitHandler} className="space-y-4">
           <div>
@@ -124,8 +120,6 @@ const Register = () => {
           >
             {isLoading ? "Registering..." : "Register"}
           </button>
-
-          {isLoading && <Loader />}
         </form>
 
         <div className="mt-4 text-center">
