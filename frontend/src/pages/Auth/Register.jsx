@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useRegisterMutation } from "../../redux/api/usersApiSlice";
 import { toast } from "react-hot-toast";
+import emailjs from "@emailjs/browser";
 
 const Register = () => {
   const [userName, setUserName] = useState("");
@@ -27,17 +28,32 @@ const Register = () => {
 
     try {
       setIsRegistered(true);
-      await register({
+      const response = await register({
         username: userName,
         email,
         password,
       }).unwrap();
+
+      emailjs.send(
+        import.meta.env.VITE_SERVICE_ID,
+        import.meta.env.VITE_TEMPLATE_ID,
+        {
+          from_name: import.meta.env.VITE_FROM_NAME,
+          to_name: response.username,
+          from_email: import.meta.env.VITE_FROM_EMAIL,
+          to_email: response.email,
+          message: `Click on the following link to verify your email: ${import.meta.env.VITE_FRONTEND_URL}/verify-email/${response.verificationToken}`,
+        },
+        import.meta.env.VITE_EMAILJS_PUBLIC_KEY,
+      ).then(() => {
+        toast.success("Verification Email Sent Successfully");
+      }).catch(() => {
+        toast.error("Could not send verification email. Please try again later.");
+      })
     } catch (error) {
       toast.error(error.data.message);
     }
   };
-
-  console.log("isRegistered", isRegistered);
 
   return (
     <div className="flex justify-center items-center min-h-screen -mt-9 bg-rose-100">

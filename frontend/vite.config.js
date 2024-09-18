@@ -7,6 +7,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/api/": "https://e-kart-shop.onrender.com",
+      // "/api/": "http://localhost:5000",
     },
   },
 });
